@@ -1,0 +1,14 @@
+---
+title: "Welcome!"
+---
+
+This website will contain materials and links to resources discussed at the Reed SpRing Bootcamp led by Chester Ismay at Reed College on Thursday, May 25 and Friday, May 26.
+
+![](https://ismayc.github.io/moderndiver-book/images/tidy1.png)
+
+***
+
+## Resources
+
+- [ModernDive:  An Introduction to Statistical and Data Sciences via R](http://moderndive.com)
+- [Effective Data Storytelling using the tidyverse - DataCamp course](https://www.datacamp.com/courses/effective-data-storytelling-using-the-tidyverse)

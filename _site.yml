@@ -1,0 +1,12 @@
+name: "poRtland-bootcamp-17"
+navbar:
+  title: "Reed SpRing Bootcamp"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Homework"
+      href: pre-hw.html
+    - text: "Slides"
+      href: slides.html
+    - text: "Agenda"
+      href: agenda.html
