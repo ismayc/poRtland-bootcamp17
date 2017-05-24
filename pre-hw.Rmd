@@ -8,13 +8,18 @@ output: html_document
 
 ***
 
-Use the computational tools/statistical analysis workflow you are familiar with to perform the following tasks:
+Use the computational tools/statistical analysis workflow you are familiar with to perform the following tasks.  By "statistical analysis workflow", I mean something like the following (there are plenty of other ways as well):
 
-The `nyc-weather-13.csv` file available from [http://bit.ly/nyc-weather-13](https://ismayc.github.io/poRtland-bootcamp17/nyc-weather-13.csv) contains hourly meteorological data from 2013 for each of the three New York City airports:
+- Using SPSS drop-down menus to do the needed calculations and plots and then copying these results into Microsoft Word where you write your analysis.
+- Writing a STATA do file to perform the analysis and then copying the results into Microsoft Word with analysis to create a report
+
+**Problem Description**:  The `nyc-weather-13.csv` file available from [http://bit.ly/nyc-weather-13](https://ismayc.github.io/poRtland-bootcamp17/nyc-weather-13.csv) contains hourly meteorological data from 2013 for each of the three New York City airports:
 
   - `EWR` - Newark Liberty International Airport
   - `JFK` - John F. Kennedy International Airport
   - `LGA` - LaGuardia Airport
+
+**Tasks to complete**:
   
 1. Produce a plot exploring the relationship between `month` and `temp`.
 1. Calculate the minimum temperature recorded for each month across all three airports. 
