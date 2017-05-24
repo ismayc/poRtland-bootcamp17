@@ -10,3 +10,4 @@ navbar:
       href: slides.html
     - text: "Agenda"
       href: agenda.html
+output_dir: "."      
