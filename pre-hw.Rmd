@@ -8,7 +8,8 @@ output: html_document
 
 Use the computational tools/statistical analysis workflow you are familiar with to perform the following tasks:
 
-The `nyc-weather-13.csv` file contains hourly meteorological data from 2013 for each of the three New York City airports:
+The `nyc-weather-13.csv` file available from <http://bit.ly/nyc-weather-13> contains hourly meteorological data from 2013 for each of the three New York City airports:
+
   - `EWR` - Newark Liberty International Airport
   - `JFK` - John F. Kennedy International Airport
   - `LGA` - LaGuardia Airport
