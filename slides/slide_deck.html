@@ -555,18 +555,18 @@ gapminder
 ```
 
 ```
-# A tibble: 1,704 x 6
+# A tibble: 1,704 × 6
        country continent  year lifeExp      pop gdpPercap
         &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
- 1 Afghanistan      Asia  1952  28.801  8425333  779.4453
- 2 Afghanistan      Asia  1957  30.332  9240934  820.8530
- 3 Afghanistan      Asia  1962  31.997 10267083  853.1007
- 4 Afghanistan      Asia  1967  34.020 11537966  836.1971
- 5 Afghanistan      Asia  1972  36.088 13079460  739.9811
- 6 Afghanistan      Asia  1977  38.438 14880372  786.1134
- 7 Afghanistan      Asia  1982  39.854 12881816  978.0114
- 8 Afghanistan      Asia  1987  40.822 13867957  852.3959
- 9 Afghanistan      Asia  1992  41.674 16317921  649.3414
+1  Afghanistan      Asia  1952  28.801  8425333  779.4453
+2  Afghanistan      Asia  1957  30.332  9240934  820.8530
+3  Afghanistan      Asia  1962  31.997 10267083  853.1007
+4  Afghanistan      Asia  1967  34.020 11537966  836.1971
+5  Afghanistan      Asia  1972  36.088 13079460  739.9811
+6  Afghanistan      Asia  1977  38.438 14880372  786.1134
+7  Afghanistan      Asia  1982  39.854 12881816  978.0114
+8  Afghanistan      Asia  1987  40.822 13867957  852.3959
+9  Afghanistan      Asia  1992  41.674 16317921  649.3414
 10 Afghanistan      Asia  1997  41.763 22227415  635.3414
 # ... with 1,694 more rows
 ```
@@ -598,7 +598,7 @@ gapminder %&gt;% filter(continent == "Asia") %&gt;%
 ```
 
 ```
-# A tibble: 1 x 1
+# A tibble: 1 × 1
   mean_exp
      &lt;dbl&gt;
 1  60.0649
@@ -608,7 +608,7 @@ gapminder %&gt;% filter(continent == "Asia") %&gt;%
 
 ## The pipe `%&gt;%`
 
-![](figure/pipe.png)&lt;!-- --&gt; &amp;emsp; &amp;emsp;![](figure/MagrittePipe.jpg)&lt;!-- --&gt;
+&lt;img src="figure/pipe.png" width="245" /&gt; &amp;emsp; &amp;emsp;![](figure/MagrittePipe.jpg)&lt;!-- --&gt;
 --
 
 - A way to chain together commands
@@ -646,7 +646,7 @@ head(gap_2007)
 ```
 
 ```
-# A tibble: 6 x 6
+# A tibble: 6 × 6
       country continent  year lifeExp      pop  gdpPercap
        &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;      &lt;dbl&gt;
 1 Afghanistan      Asia  2007  43.828 31889923   974.5803
@@ -675,18 +675,18 @@ gapminder %&gt;%
 
 
 ```
-# A tibble: 472 x 6
+# A tibble: 472 × 6
        country continent  year lifeExp      pop gdpPercap
         &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
- 1 Afghanistan      Asia  2002  42.129 25268405  726.7341
- 2     Albania    Europe  1952  55.230  1282697 1601.0561
- 3     Albania    Europe  1957  59.280  1476505 1942.2842
- 4     Albania    Europe  1962  64.820  1728137 2312.8890
- 5     Albania    Europe  1967  66.220  1984060 2760.1969
- 6     Albania    Europe  1972  67.690  2263554 3313.4222
- 7     Albania    Europe  1977  68.930  2509048 3533.0039
- 8     Albania    Europe  1982  70.420  2780097 3630.8807
- 9     Albania    Europe  1987  72.000  3075321 3738.9327
+1  Afghanistan      Asia  2002  42.129 25268405  726.7341
+2      Albania    Europe  1952  55.230  1282697 1601.0561
+3      Albania    Europe  1957  59.280  1476505 1942.2842
+4      Albania    Europe  1962  64.820  1728137 2312.8890
+5      Albania    Europe  1967  66.220  1984060 2760.1969
+6      Albania    Europe  1972  67.690  2263554 3313.4222
+7      Albania    Europe  1977  68.930  2509048 3533.0039
+8      Albania    Europe  1982  70.420  2780097 3630.8807
+9      Albania    Europe  1987  72.000  3075321 3738.9327
 10     Albania    Europe  1992  71.581  3326498 2497.4379
 # ... with 462 more rows
 ```
@@ -706,18 +706,18 @@ gapminder %&gt;%
 
 
 ```
-# A tibble: 30 x 6
+# A tibble: 30 × 6
                   country continent  year lifeExp      pop gdpPercap
                    &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
- 1                Albania    Europe  2002  75.651  3508512  4604.212
- 2                Austria    Europe  2002  78.980  8148312 32417.608
- 3                Belgium    Europe  2002  78.320 10311970 30485.884
- 4 Bosnia and Herzegovina    Europe  2002  74.090  4165416  6018.975
- 5               Bulgaria    Europe  2002  72.140  7661799  7696.778
- 6                Croatia    Europe  2002  74.876  4481020 11628.389
- 7         Czech Republic    Europe  2002  75.510 10256295 17596.210
- 8                Denmark    Europe  2002  77.180  5374693 32166.500
- 9                Finland    Europe  2002  78.370  5193039 28204.591
+1                 Albania    Europe  2002  75.651  3508512  4604.212
+2                 Austria    Europe  2002  78.980  8148312 32417.608
+3                 Belgium    Europe  2002  78.320 10311970 30485.884
+4  Bosnia and Herzegovina    Europe  2002  74.090  4165416  6018.975
+5                Bulgaria    Europe  2002  72.140  7661799  7696.778
+6                 Croatia    Europe  2002  74.876  4481020 11628.389
+7          Czech Republic    Europe  2002  75.510 10256295 17596.210
+8                 Denmark    Europe  2002  77.180  5374693 32166.500
+9                 Finland    Europe  2002  78.370  5193039 28204.591
 10                 France    Europe  2002  79.590 59925035 28926.032
 # ... with 20 more rows
 ```
@@ -739,7 +739,7 @@ gapminder %&gt;%
 
 
 ```
-# A tibble: 6 x 6
+# A tibble: 6 × 6
     country continent  year lifeExp      pop gdpPercap
      &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
 1 Argentina  Americas  1987  70.774 31620918  9139.671
@@ -768,7 +768,7 @@ max_exp_1997
 
 
 ```
-# A tibble: 1 x 1
+# A tibble: 1 × 1
   max_exp
     &lt;dbl&gt;
 1   80.69
@@ -795,7 +795,7 @@ max_exp_1997_by_cont
 --
 
 ```
-# A tibble: 5 x 2
+# A tibble: 5 × 2
   continent max_exp
      &lt;fctr&gt;   &lt;dbl&gt;
 1    Africa  74.772
@@ -852,7 +852,7 @@ head(gap_plus)
 ```
 
 ```
-# A tibble: 6 x 7
+# A tibble: 6 × 7
       country continent  year lifeExp      pop gdpPercap just_one
        &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;
 1 Afghanistan      Asia  1952  28.801  8425333  779.4453        1
@@ -881,7 +881,7 @@ head(gap_w_gdp)
 ```
 
 ```
-# A tibble: 6 x 7
+# A tibble: 6 × 7
       country continent  year lifeExp      pop gdpPercap         gdp
        &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;       &lt;dbl&gt;
 1 Afghanistan      Asia  1952  28.801  8425333  779.4453  6567086330
@@ -910,7 +910,7 @@ head(gap_weird)
 ```
 
 ```
-# A tibble: 6 x 6
+# A tibble: 6 × 6
       country continent  year lifeExp      pop gdpPercap
        &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 1 Afghanistan      Asia  1952  28.801  8426333  779.4453
@@ -935,18 +935,18 @@ gapminder %&gt;%
 ```
 
 ```
-# A tibble: 1,704 x 6
+# A tibble: 1,704 × 6
        country continent  year lifeExp      pop  gdpPercap
         &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;      &lt;dbl&gt;
- 1 Afghanistan      Asia  1952  28.801  8425333   779.4453
- 2     Albania    Europe  1952  55.230  1282697  1601.0561
- 3     Algeria    Africa  1952  43.077  9279525  2449.0082
- 4      Angola    Africa  1952  30.015  4232095  3520.6103
- 5   Argentina  Americas  1952  62.485 17876956  5911.3151
- 6   Australia   Oceania  1952  69.120  8691212 10039.5956
- 7     Austria    Europe  1952  66.800  6927772  6137.0765
- 8     Bahrain      Asia  1952  50.939   120447  9867.0848
- 9  Bangladesh      Asia  1952  37.484 46886859   684.2442
+1  Afghanistan      Asia  1952  28.801  8425333   779.4453
+2      Albania    Europe  1952  55.230  1282697  1601.0561
+3      Algeria    Africa  1952  43.077  9279525  2449.0082
+4       Angola    Africa  1952  30.015  4232095  3520.6103
+5    Argentina  Americas  1952  62.485 17876956  5911.3151
+6    Australia   Oceania  1952  69.120  8691212 10039.5956
+7      Austria    Europe  1952  66.800  6927772  6137.0765
+8      Bahrain      Asia  1952  50.939   120447  9867.0848
+9   Bangladesh      Asia  1952  37.484 46886859   684.2442
 10     Belgium    Europe  1952  68.000  8730405  8343.1051
 # ... with 1,694 more rows
 ```
@@ -988,18 +988,17 @@ gapminder %&gt;% group_by(year)
 Source: local data frame [1,704 x 6]
 Groups: year [12]
 
-# A tibble: 1,704 x 6
        country continent  year lifeExp      pop gdpPercap
         &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
- 1 Afghanistan      Asia  1952  28.801  8425333  779.4453
- 2 Afghanistan      Asia  1957  30.332  9240934  820.8530
- 3 Afghanistan      Asia  1962  31.997 10267083  853.1007
- 4 Afghanistan      Asia  1967  34.020 11537966  836.1971
- 5 Afghanistan      Asia  1972  36.088 13079460  739.9811
- 6 Afghanistan      Asia  1977  38.438 14880372  786.1134
- 7 Afghanistan      Asia  1982  39.854 12881816  978.0114
- 8 Afghanistan      Asia  1987  40.822 13867957  852.3959
- 9 Afghanistan      Asia  1992  41.674 16317921  649.3414
+1  Afghanistan      Asia  1952  28.801  8425333  779.4453
+2  Afghanistan      Asia  1957  30.332  9240934  820.8530
+3  Afghanistan      Asia  1962  31.997 10267083  853.1007
+4  Afghanistan      Asia  1967  34.020 11537966  836.1971
+5  Afghanistan      Asia  1972  36.088 13079460  739.9811
+6  Afghanistan      Asia  1977  38.438 14880372  786.1134
+7  Afghanistan      Asia  1982  39.854 12881816  978.0114
+8  Afghanistan      Asia  1987  40.822 13867957  852.3959
+9  Afghanistan      Asia  1992  41.674 16317921  649.3414
 10 Afghanistan      Asia  1997  41.763 22227415  635.3414
 # ... with 1,694 more rows
 ```
@@ -1016,18 +1015,18 @@ gapminder %&gt;% arrange(year)
 ```
 
 ```
-# A tibble: 1,704 x 6
+# A tibble: 1,704 × 6
        country continent  year lifeExp      pop  gdpPercap
         &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;      &lt;dbl&gt;
- 1 Afghanistan      Asia  1952  28.801  8425333   779.4453
- 2     Albania    Europe  1952  55.230  1282697  1601.0561
- 3     Algeria    Africa  1952  43.077  9279525  2449.0082
- 4      Angola    Africa  1952  30.015  4232095  3520.6103
- 5   Argentina  Americas  1952  62.485 17876956  5911.3151
- 6   Australia   Oceania  1952  69.120  8691212 10039.5956
- 7     Austria    Europe  1952  66.800  6927772  6137.0765
- 8     Bahrain      Asia  1952  50.939   120447  9867.0848
- 9  Bangladesh      Asia  1952  37.484 46886859   684.2442
+1  Afghanistan      Asia  1952  28.801  8425333   779.4453
+2      Albania    Europe  1952  55.230  1282697  1601.0561
+3      Algeria    Africa  1952  43.077  9279525  2449.0082
+4       Angola    Africa  1952  30.015  4232095  3520.6103
+5    Argentina  Americas  1952  62.485 17876956  5911.3151
+6    Australia   Oceania  1952  69.120  8691212 10039.5956
+7      Austria    Europe  1952  66.800  6927772  6137.0765
+8      Bahrain      Asia  1952  50.939   120447  9867.0848
+9   Bangladesh      Asia  1952  37.484 46886859   684.2442
 10     Belgium    Europe  1952  68.000  8730405  8343.1051
 # ... with 1,694 more rows
 ```
@@ -1060,7 +1059,7 @@ Draw diagram for average monthly temp aggregated like on rstudio::conf slides
 
 ### Does cost of living in a state relate to whether police officers live in the cities they patrol?  What about state political ideology?
 
-- &lt;small&gt;&lt;small&gt;Note that you may need to refresh the page for the data to appear&lt;/small&gt;&lt;/small&gt;
+- &lt;small&gt;&lt;small&gt;&lt;small&gt;Note that you may need to refresh the page for the data to appear.  Not available in PDF.&lt;/small&gt;&lt;/small&gt;&lt;/small&gt;
 
 
 ```r
@@ -1078,7 +1077,7 @@ paged_table(police_join)
 
 ---
 
-- &lt;small&gt;&lt;small&gt;Note that you may need to refresh the page for the data to appear&lt;/small&gt;&lt;/small&gt;
+- &lt;small&gt;&lt;small&gt;&lt;small&gt;Note that you may need to refresh the page for the data to appear.  Not available in PDF.&lt;/small&gt;&lt;/small&gt;&lt;/small&gt;
 
 
 ```r
@@ -1139,7 +1138,7 @@ Before you go
 "highlightLines": true,
 "highlightLanguage": "r"
 });
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});</script>
+if (window.HTMLWidgets) slideshow.on('showSlide', function (slide) {setTimeout(function() {window.dispatchEvent(new Event('resize'));}, 100)});</script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -1153,7 +1152,7 @@ MathJax.Hub.Config({
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  script.src  = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);

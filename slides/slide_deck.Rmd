@@ -879,7 +879,7 @@ knitr::include_graphics("https://ismayc.github.io/moderndiver-book/images/join-i
 
 ### Does cost of living in a state relate to whether police officers live in the cities they patrol?  What about state political ideology?
 
-- <small><small>Note that you may need to refresh the page for the data to appear</small></small>
+- <small><small><small>Note that you may need to refresh the page for the data to appear.  Not available in PDF.</small></small></small>
 
 ```{r rows.print=7}
 library(fivethirtyeight); library(readr); library(rmarkdown)
@@ -890,7 +890,7 @@ paged_table(police_join)
 
 ---
 
-- <small><small>Note that you may need to refresh the page for the data to appear</small></small>
+- <small><small><small>Note that you may need to refresh the page for the data to appear.  Not available in PDF.</small></small></small>
 
 ```{r}
 cost_of_living <- read_csv("https://ismayc.github.io/Effective-Data-Storytelling-using-the-tidyverse/datasets/cost_of_living.csv")
