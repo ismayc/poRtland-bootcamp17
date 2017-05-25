@@ -1014,6 +1014,14 @@ knitr::include_graphics("https://ismayc.github.io/moderndiver-book/images/join-i
 
 ### Does cost of living in a state relate to whether police officers live in the cities they patrol?  What about state political ideology?
 
+<<<<<<< HEAD
+||||||| merged common ancestors
+- <small><small>Note that you may need to refresh the page for the data to appear</small></small>
+
+=======
+- <small><small><small>Note that you may need to refresh the page for the data to appear.  Not available in PDF.</small></small></small>
+
+>>>>>>> 996ca108cf41ed3ba0965e08d2174f91d351798a
 ```{r rows.print=7}
 library(fivethirtyeight); library(readr)
 police2 <- police_locals %>% select(city, all)
@@ -1024,6 +1032,14 @@ police_join
 
 ---
 
+<<<<<<< HEAD
+||||||| merged common ancestors
+- <small><small>Note that you may need to refresh the page for the data to appear</small></small>
+
+=======
+- <small><small><small>Note that you may need to refresh the page for the data to appear.  Not available in PDF.</small></small></small>
+
+>>>>>>> 996ca108cf41ed3ba0965e08d2174f91d351798a
 ```{r}
 url <- paste0("https://ismayc.github.io/",
               "Effective-Data-Storytelling-using-the-tidyverse/",
