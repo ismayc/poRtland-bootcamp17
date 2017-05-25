@@ -30,7 +30,7 @@ title: "Agenda"
 - Modeling with 
     - `lm` and `glm` functions
     - `lmer` function in `lme4` package
-    - various function in the `caret` package
+    - various functions in the `caret` package
     - Other requests?
 - Communicating with `rmarkdown`
 
