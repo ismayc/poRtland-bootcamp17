@@ -2,4 +2,42 @@
 title: "Agenda"
 ---
 
-This page will likely be updated after content has been covered. (In development)
+## Day 1 (12:30 PM to 4:30-ish PM)
+
+- Go over Pre-Bootcamp HW (Check Homework tab)
+    - Demo in RStudio with R Markdown how to solve this
+    - The power of computational reproducibility
+    - Look over cheatsheets for RStudio and R Markdown
+- Talk about why you might want to learn R and teach it to your students
+- Discuss basic R data types
+- Use `ggplot2` for graphics 
+    - Discuss the theoretical underpinnings of the Grammar of Graphics
+    - Walk through with pencil-and-paper building a scatterplot and line graph
+    - Talk about other basic plots
+    - PRACTICE making plots
+- Use `dplyr` for data wrangling / summarizing
+    - Subsetting rows with `filter()`
+    - Creating a numerical summary with `summarize()`
+    - Building summaries across groups of one or more variable with `group_by() %>% summarize()`
+    - Design a new variable using `mutate()`
+    - Sort the data based on one or more variables with `arrange()`
+    
+## Day 2 (9:30 AM to 4:30-ish PM)  
+
+- Importing data using `readr`, `readxl`, and `haven` packages
+- What is tidy data
+- Using the `tidyr` package to reshape/tidy/make data long
+- Modeling with 
+    - `lm` and `glm` functions
+    - `lmer` function in `lme4` package
+    - various function in the `caret` package
+    - Other requests?
+- Communicating with `rmarkdown`
+
+### Potential other topics to cover
+
+  - Other `tidyverse` packages
+  - Interactive webpages using `shiny`
+  - Writing books with `bookdown`
+  - Parameterized reports in `rmarkdown`
+  - Other requests?
