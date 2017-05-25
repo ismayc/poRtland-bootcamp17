@@ -381,7 +381,7 @@ simple_ex %>% knitr::kable(format="html")
 1. <small>A scatter plot where the `color` of the points corresponds to `D`</small>
 1. <small>A scatter plot where the `size` of the points corresponds to `C`</small>
 1. <small>A line graph</small>
-1. <small>A line graph where the `color` of the line corresponds to `D` with points added that are all green of size 4.</small>
+1. <small>A line graph where the `color` of the line corresponds to `D` with points added that are all forestgreen of size 4.</small>
 
 ---
 
@@ -470,14 +470,14 @@ ggplot(data = simple_ex, aes(x = A, y = B)) +
 library(ggplot2)
 ggplot(data = simple_ex, mapping = aes(x = A, y = B)) + 
   geom_line(mapping = aes(color = D)) +
-  geom_point(color = "green", size = 4)
+  geom_point(color = "forestgreen", size = 4)
 ```
 --
 
 ```{r, echo=FALSE, fig.height=4}
 ggplot(data = simple_ex, mapping = aes(x = A, y = B)) + 
   geom_line(mapping = aes(color = D)) +
-  geom_point(color = "green", size = 4)
+  geom_point(color = "forestgreen", size = 4)
 ```
 
 ---
@@ -681,7 +681,9 @@ class: center, middle
 
 class: inverse, center, middle
 
-# Data Wrangling
+# Day 2
+
+## Data Wrangling
 
 ---
 

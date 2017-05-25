@@ -15,15 +15,15 @@ title: "Agenda"
     - Walk through with pencil-and-paper building a scatterplot and line graph
     - Talk about other basic plots
     - PRACTICE making plots
+    
+## Day 2 (9:30 AM to 4:30-ish PM)  
+
 - Use `dplyr` for data wrangling / summarizing
     - Subsetting rows with `filter()`
     - Creating a numerical summary with `summarize()`
     - Building summaries across groups of one or more variable with `group_by() %>% summarize()`
     - Design a new variable using `mutate()`
     - Sort the data based on one or more variables with `arrange()`
-    
-## Day 2 (9:30 AM to 4:30-ish PM)  
-
 - Importing data using `readr`, `readxl`, and `haven` packages
 - What is tidy data
 - Using the `tidyr` package to reshape/tidy/make data long

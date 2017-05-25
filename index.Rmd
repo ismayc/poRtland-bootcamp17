@@ -15,3 +15,4 @@ This website will contain materials and links to resources discussed at the Reed
 - [Effective Data Storytelling using the tidyverse - Free DataCamp course](https://www.datacamp.com/courses/effective-data-storytelling-using-the-tidyverse)
 - [Getting Used to R, RStudio, and R Markdown](https://ismayc.github.io/rbasics-book/)
 - [R for Data Science - Garrett Grolemund and Hadley Wickham](http://r4ds.had.co.nz/)
+- [List of named colors in R](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf)
