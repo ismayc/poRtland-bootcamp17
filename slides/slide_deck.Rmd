@@ -42,9 +42,57 @@ theme_set(theme_gray(base_size = 24))
 
 ---
 
+name: whyr
+
+## Why are you here wanting to learn R?
+
+- ~~Because you enjoy partaking in [Schadenfreude](https://en.wikipedia.org/wiki/Schadenfreude)~~
+
+<center>
+<img src="figure/google_scholar.png" style="width: 700px;"/>
+</center>
+
+---
+
+## Why should you learn R?
+
+- R is free, R improves, R has existed for 40+ years
+- Students can show what they have learned to a potential employer easily
+- The support system for R is actually much better than some people say
+
+
+---
+
+## But as a professor, why should you learn R?
+
+- R and R Markdown will save you TONS of time. Long term thinking is key.
+    - You can easily tweak your code if you need to do another analysis
+    - Remembering what drop-down menu some thing is in two years from now in a different program will be hard
+    - Remembering to copy-and-paste your updated plots/analysis into your word processor is a pain and error prone
+
+---
+
+## But as a professor, why should you learn R?
+    
+<center>
+<img src="figure/tweet.jpg" style="width: 700px;"/>
+</center>
+
+---
+
 class: inverse, center, middle
 
 # DEMO in RStudio <br> with R Markdown
+
+---
+
+class: center, middle
+
+## Analogy
+
+R            |  RStudio |  DataCamp
+:-------------------------:|:-------------------------:|:-------------------------:
+<img src="figure/engine.jpg" alt="Drawing" style="width: 350px;"/>  |  <img src="figure/dashboard.jpg" alt="Drawing" style="width: 350px;"/>  |  <img src="figure/instructor.jpg" alt="Drawing" style="width: 350px;"/>
 
 ---
 
@@ -80,7 +128,7 @@ class: inverse, center, middle
 
 --
 
-- That having students turn in assignments using R Markdown provides an efficient way to check their work and their analyses easily.
+- That having students turn in assignments using R scripts and R Markdown provides an efficient way to check their work and their analyses easily.
 
 ---
 
@@ -100,6 +148,42 @@ class: inverse, center, middle
 
 ---
 
+## Pieces of advice
+
+<center>
+<a href="http://giphy.com/gifs/pool-diving-synchronized-swimming-pDWtwK7D2IlFu"><img src="figure/giphy2.gif" style="width: 300px;"/></a>
+</center>
+
+- Scaffold & support as a foreign languages do
+
+--
+
+- To be able to use R (and really any other language), students need more than a few assignments and more than a weekly lab
+
+--
+
+- Make use of RStudio Projects (students have a really hard time navigating directory structures)
+
+
+---
+
+## Pieces of advice
+
+### My opinion
+
+- Have students work on writing their code in R script files and documenting their errors
+    - This is the same workflow that DataCamp uses
+
+--
+
+- Show students [R Markdown after a few weeks](https://ismayc.github.io/soc301_s2017/schedule/) of working with the script file
+    - I've found it is hard for students to learn R and R Markdown from the start
+    - Better to have them use R Markdown in groups initially
+
+
+---
+
+
 class: inverse, center, middle
 
 # R Data Types
@@ -116,6 +200,38 @@ Vector/variable
 Data frame
   - Vectors of (potentially) different types
   - Each vector has the same number of rows
+
+---
+
+## The bare minimum needed for understanding today
+
+```{r eval=FALSE}
+library(tibble)
+library(lubridate)
+ex1 <- data_frame(
+    vec1 = c(1980, 1990, 2000, 2010),
+    vec2 = c(1L, 2L, 3L, 4L),
+    vec3 = c("low", "low", "high", "high"),
+    vec4 = c(TRUE, FALSE, FALSE, FALSE),
+    vec5 = ymd(c("2017-05-23", "1776/07/04", "1983-05/31", "1908/04-01"))
+  )
+ex1
+```
+
+--
+
+```{r echo=FALSE}
+library(tibble)
+library(lubridate)
+ex1 <- data_frame(
+    vec1 = c(1980, 1990, 2000, 2010),
+    vec2 = c(1L, 2L, 3L, 4L),
+    vec3 = c("low", "low", "high", "high"),
+    vec4 = c(TRUE, FALSE, FALSE, FALSE),
+    vec5 = ymd(c("2017-05-23", "1776/7/04", "1983-5/31", "1908/04-1"))
+  )
+ex1
+```
   
 ---
 
@@ -141,7 +257,7 @@ Frequently the first thing to do when given a dataset is to
 This will help with 
 - choosing the appropriate plot, 
 - summarizing the data, and 
-- understanding which inferences can be applied.
+- understanding which inferences/models can be applied.
 
 ---
 
@@ -237,7 +353,7 @@ class: inverse, center, middle
 
 ### Consider the following data in tidy format:
 
-```{r echo=FALSE}
+```{r}
 simple_ex <-
   data_frame(
     A = c(1980, 1990, 2000, 2010),
@@ -245,10 +361,19 @@ simple_ex <-
     C = c(3, 2, 1, 2),
     D = c("low", "low", "high", "high")
   )
-simple_ex %>% knitr::kable(format="html")
+simple_ex
 ```
 
 <!-- Copy to chalkboard/whiteboard -->
+
+---
+
+### Consider the following data in tidy format:
+
+```{r echo=FALSE}
+simple_ex %>% knitr::kable(format="html")
+```
+
 
 - Sketch the graphics below on paper, where the `x`-axis is variable `A` and the `y`-axis is variable `B`
 
@@ -399,12 +524,22 @@ ggplot(data = weather, mapping = aes(x = month, y = humid)) +
 ---
 
 
-## Boxplot (fixed)
+## Boxplot (almost fixed)
 
 ```{r fig.height=5.5}
 library(nycflights13)
 ggplot(data = weather, mapping = aes(x = month, group = month, y = humid)) +
-  geom_boxplot()
+  geom_boxplot() 
+```
+---
+
+# Boxplot (fixed)
+
+```{r fig.height=5.5}
+library(nycflights13)
+ggplot(data = weather, mapping = aes(x = month, group = month, y = humid)) +
+  geom_boxplot() +
+  scale_x_continuous(breaks = 1:12)
 ```
 
 ---
@@ -477,7 +612,7 @@ ggplot(data = bechdel,
 
 class: center, middle
 
-## `ggplot2` is for beginners and <br> for data science professionals!
+## The `tidyverse`/`ggplot2` is for beginners and <br> for data science professionals!
 
 <a href="https://fivethirtyeight.com/features/the-dollar-and-cents-case-against-hollywoods-exclusion-of-women/"><img src="figure/bechdel.png" style="width: 500px;"/><a>
 
@@ -879,23 +1014,27 @@ knitr::include_graphics("https://ismayc.github.io/moderndiver-book/images/join-i
 
 ### Does cost of living in a state relate to whether police officers live in the cities they patrol?  What about state political ideology?
 
-- <small><small>Note that you may need to refresh the page for the data to appear</small></small>
-
 ```{r rows.print=7}
-library(fivethirtyeight); library(readr); library(rmarkdown)
+library(fivethirtyeight); library(readr)
+police2 <- police_locals %>% select(city, all)
 ideology <- read_csv("https://ismayc.github.io/Effective-Data-Storytelling-using-the-tidyverse/datasets/ideology.csv")
-police_join <- inner_join(x = police_locals, y = ideology, by = "city")
-paged_table(police_join)
+police_join <- inner_join(x = police2, y = ideology, by = "city")
+police_join
 ```
 
 ---
 
-- <small><small>Note that you may need to refresh the page for the data to appear</small></small>
-
 ```{r}
-cost_of_living <- read_csv("https://ismayc.github.io/Effective-Data-Storytelling-using-the-tidyverse/datasets/cost_of_living.csv")
-police_join_cost <- inner_join(x = police_join, y = cost_of_living, by = "state")
-paged_table(police_join_cost)
+url <- paste0("https://ismayc.github.io/",
+              "Effective-Data-Storytelling-using-the-tidyverse/",
+              "datasets/cost_of_living.csv")
+cost_of_living <- read_csv(url)
+police_join_cost <- inner_join(
+    x = police_join, 
+    y = cost_of_living, 
+    by = "state"
+  )
+police_join_cost %>% select(-state) %>% arrange(city)
 ```
 
 ---
@@ -905,7 +1044,7 @@ paged_table(police_join_cost)
 ```{r fig.width=10}
 ggplot(data = police_join_cost,
        mapping = aes(x = index, y = all)) +
-  geom_point(aes(color = state_ideology)) +
+  geom_point(mapping = aes(color = state_ideology)) +
   labs(x = "Cost of Living Index", y = "% Officers Living in City")
 ```
 
@@ -923,11 +1062,18 @@ Use the 5MV to answer problems from R data packages, e.g., [`nycflights13` $\rig
 
 ---
 
+
+class: inverse, center, middle
+
+# DEMO of `dplyr` in RStudio
+
+---
+
 ## Homework for tomorrow
 
-- Use the `readr`, `readxl`, and `haven` packages to read in data from CSVs, Excel XLS files, STATA/SPSS files
+- Review the Data Import cheatsheet and use the `readr`, `readxl`, and `haven` packages to read in data from CSVs, Excel XLS/XLSX files, STATA/SPSS files
 
-- Use `ggplot2` and `dplyr` to make graphics and produce data wrangling on data sets of interest to you
+- Use `ggplot2` and `dplyr` to make graphics and produce data wrangling on data sets of interest to you read in from the previous step
 
 <br>
 

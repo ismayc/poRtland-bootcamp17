@@ -4,8 +4,6 @@
     <title>Putting the R in Reed and   in Lewis and ClaRk</title>
     <meta charset="utf-8">
     <meta name="author" content="Chester Ismay    GitHub: ismayc   Twitter: @old_man_chester" />
-    <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
-    <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
     <link rel="stylesheet" href="example.css" type="text/css" />
   </head>
   <body>
@@ -37,9 +35,57 @@ class: inverse, center, middle
 
 ---
 
+name: whyr
+
+## Why are you here wanting to learn R?
+
+- ~~Because you enjoy partaking in [Schadenfreude](https://en.wikipedia.org/wiki/Schadenfreude)~~
+
+&lt;center&gt;
+&lt;img src="figure/google_scholar.png" style="width: 700px;"/&gt;
+&lt;/center&gt;
+
+---
+
+## Why should you learn R?
+
+- R is free, R improves, R has existed for 40+ years
+- Students can show what they have learned to a potential employer easily
+- The support system for R is actually much better than some people say
+
+
+---
+
+## But as a professor, why should you learn R?
+
+- R and R Markdown will save you TONS of time. Long term thinking is key.
+    - You can easily tweak your code if you need to do another analysis
+    - Remembering what drop-down menu some thing is in two years from now in a different program will be hard
+    - Remembering to copy-and-paste your updated plots/analysis into your word processor is a pain and error prone
+
+---
+
+## But as a professor, why should you learn R?
+    
+&lt;center&gt;
+&lt;img src="figure/tweet.jpg" style="width: 700px;"/&gt;
+&lt;/center&gt;
+
+---
+
 class: inverse, center, middle
 
 # DEMO in RStudio &lt;br&gt; with R Markdown
+
+---
+
+class: center, middle
+
+## Analogy
+
+R            |  RStudio |  DataCamp
+:-------------------------:|:-------------------------:|:-------------------------:
+&lt;img src="figure/engine.jpg" alt="Drawing" style="width: 350px;"/&gt;  |  &lt;img src="figure/dashboard.jpg" alt="Drawing" style="width: 350px;"/&gt;  |  &lt;img src="figure/instructor.jpg" alt="Drawing" style="width: 350px;"/&gt;
 
 ---
 
@@ -75,7 +121,7 @@ class: inverse, center, middle
 
 --
 
-- That having students turn in assignments using R Markdown provides an efficient way to check their work and their analyses easily.
+- That having students turn in assignments using R scripts and R Markdown provides an efficient way to check their work and their analyses easily.
 
 ---
 
@@ -95,6 +141,42 @@ class: inverse, center, middle
 
 ---
 
+## Pieces of advice
+
+&lt;center&gt;
+&lt;a href="http://giphy.com/gifs/pool-diving-synchronized-swimming-pDWtwK7D2IlFu"&gt;&lt;img src="figure/giphy2.gif" style="width: 300px;"/&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+- Scaffold &amp; support as a foreign languages do
+
+--
+
+- To be able to use R (and really any other language), students need more than a few assignments and more than a weekly lab
+
+--
+
+- Make use of RStudio Projects (students have a really hard time navigating directory structures)
+
+
+---
+
+## Pieces of advice
+
+### My opinion
+
+- Have students work on writing their code in R script files and documenting their errors
+    - This is the same workflow that DataCamp uses
+
+--
+
+- Show students [R Markdown after a few weeks](https://ismayc.github.io/soc301_s2017/schedule/) of working with the script file
+    - I've found it is hard for students to learn R and R Markdown from the start
+    - Better to have them use R Markdown in groups initially
+
+
+---
+
+
 class: inverse, center, middle
 
 # R Data Types
@@ -111,6 +193,37 @@ Vector/variable
 Data frame
   - Vectors of (potentially) different types
   - Each vector has the same number of rows
+
+---
+
+## The bare minimum needed for understanding today
+
+
+```r
+library(tibble)
+library(lubridate)
+ex1 &lt;- data_frame(
+    vec1 = c(1980, 1990, 2000, 2010),
+    vec2 = c(1L, 2L, 3L, 4L),
+    vec3 = c("low", "low", "high", "high"),
+    vec4 = c(TRUE, FALSE, FALSE, FALSE),
+    vec5 = ymd(c("2017-05-23", "1776/07/04", "1983-05/31", "1908/04-01"))
+  )
+ex1
+```
+
+--
+
+
+```
+# A tibble: 4 x 5
+   vec1  vec2  vec3  vec4       vec5
+  &lt;dbl&gt; &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;     &lt;date&gt;
+1  1980     1   low  TRUE 2017-05-23
+2  1990     2   low FALSE 1776-07-04
+3  2000     3  high FALSE 1983-05-31
+4  2010     4  high FALSE 1908-04-01
+```
   
 ---
 
@@ -136,7 +249,7 @@ Frequently the first thing to do when given a dataset is to
 This will help with 
 - choosing the appropriate plot, 
 - summarizing the data, and 
-- understanding which inferences can be applied.
+- understanding which inferences/models can be applied.
 
 ---
 
@@ -150,7 +263,7 @@ Inspired by [Hans Rosling](https://www.youtube.com/watch?v=jbkSRLYSojo)
 
 ---
 
-&lt;img src="slide_deck_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="slide_deck_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
 
 
 - What are the variables here?
@@ -217,6 +330,34 @@ class: inverse, center, middle
 
 ### Consider the following data in tidy format:
 
+
+```r
+simple_ex &lt;-
+  data_frame(
+    A = c(1980, 1990, 2000, 2010),
+    B = c(1, 2, 3, 4),
+    C = c(3, 2, 1, 2),
+    D = c("low", "low", "high", "high")
+  )
+simple_ex
+```
+
+```
+# A tibble: 4 x 4
+      A     B     C     D
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;
+1  1980     1     3   low
+2  1990     2     2   low
+3  2000     3     1  high
+4  2010     4     2  high
+```
+
+&lt;!-- Copy to chalkboard/whiteboard --&gt;
+
+---
+
+### Consider the following data in tidy format:
+
 &lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
@@ -254,7 +395,6 @@ class: inverse, center, middle
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;!-- Copy to chalkboard/whiteboard --&gt;
 
 - Sketch the graphics below on paper, where the `x`-axis is variable `A` and the `y`-axis is variable `B`
 
@@ -278,7 +418,7 @@ ggplot(data = simple_ex, mapping = aes(x = A, y = B)) +
 ```
 --
 
-![](slide_deck_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -296,7 +436,7 @@ ggplot(data = simple_ex, mapping = aes(x = A, y = B)) +
 ```
 --
 
-![](slide_deck_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -313,7 +453,7 @@ ggplot(data = simple_ex, mapping = aes(x = A, y = B, size = C)) +
 ```
 --
 
-![](slide_deck_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -330,7 +470,7 @@ ggplot(data = simple_ex, mapping = aes(x = A, y = B)) +
 ```
 --
 
-![](slide_deck_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -348,7 +488,7 @@ ggplot(data = simple_ex, mapping = aes(x = A, y = B)) +
 ```
 --
 
-![](slide_deck_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -382,7 +522,7 @@ ggplot(data = weather, mapping = aes(x = humid)) +
   geom_histogram(bins = 20, color = "black", fill = "darkorange")
 ```
 
-![](slide_deck_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -395,21 +535,34 @@ ggplot(data = weather, mapping = aes(x = month, y = humid)) +
   geom_boxplot()
 ```
 
-![](slide_deck_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
 
 ---
 
 
-## Boxplot (fixed)
+## Boxplot (almost fixed)
 
 
 ```r
 library(nycflights13)
 ggplot(data = weather, mapping = aes(x = month, group = month, y = humid)) +
-  geom_boxplot()
+  geom_boxplot() 
 ```
 
-![](slide_deck_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+---
+
+# Boxplot (fixed)
+
+
+```r
+library(nycflights13)
+ggplot(data = weather, mapping = aes(x = month, group = month, y = humid)) +
+  geom_boxplot() +
+  scale_x_continuous(breaks = 1:12)
+```
+
+![](slide_deck_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -422,7 +575,7 @@ ggplot(data = bechdel, mapping = aes(x = clean_test)) +
   geom_bar()
 ```
 
-![](slide_deck_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -458,7 +611,7 @@ ggplot(data = bechdel,
   geom_bar()
 ```
 
-![](slide_deck_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -473,7 +626,7 @@ ggplot(data = bechdel,
   geom_bar(position = "dodge")
 ```
 
-![](slide_deck_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -488,13 +641,13 @@ ggplot(data = bechdel,
   geom_bar(position = "fill", color = "black")
 ```
 
-![](slide_deck_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
 
 ---
 
 class: center, middle
 
-## `ggplot2` is for beginners and &lt;br&gt; for data science professionals!
+## The `tidyverse`/`ggplot2` is for beginners and &lt;br&gt; for data science professionals!
 
 &lt;a href="https://fivethirtyeight.com/features/the-dollar-and-cents-case-against-hollywoods-exclusion-of-women/"&gt;&lt;img src="figure/bechdel.png" style="width: 500px;"/&gt;&lt;a&gt;
 
@@ -520,7 +673,7 @@ Try to look through the help documentation/Google to improve your plots
 
 ### HINTS
 
-![](slide_deck_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
 
 
 
@@ -818,7 +971,7 @@ ggplot(data = max_exp_1997_by_cont,
   geom_col()
 ```
 
-![](slide_deck_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
 ---
 
 
@@ -1060,38 +1213,64 @@ Draw diagram for average monthly temp aggregated like on rstudio::conf slides
 
 ### Does cost of living in a state relate to whether police officers live in the cities they patrol?  What about state political ideology?
 
-- &lt;small&gt;&lt;small&gt;Note that you may need to refresh the page for the data to appear&lt;/small&gt;&lt;/small&gt;
-
 
 ```r
-library(fivethirtyeight); library(readr); library(rmarkdown)
+library(fivethirtyeight); library(readr)
+police2 &lt;- police_locals %&gt;% select(city, all)
 ideology &lt;- read_csv("https://ismayc.github.io/Effective-Data-Storytelling-using-the-tidyverse/datasets/ideology.csv")
-police_join &lt;- inner_join(x = police_locals, y = ideology, by = "city")
-paged_table(police_join)
+police_join &lt;- inner_join(x = police2, y = ideology, by = "city")
+police_join
 ```
 
-&lt;div data-pagedtable="false"&gt;
-  &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["city"],"name":[1],"type":["chr"],"align":["left"]},{"label":["force_size"],"name":[2],"type":["int"],"align":["right"]},{"label":["all"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["white"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["non_white"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["black"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["hispanic"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["asian"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["state"],"name":[9],"type":["chr"],"align":["left"]},{"label":["state_ideology"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"New York","2":"32300","3":"0.61795666","4":"0.44638656","5":"0.76441894","6":"0.7708914","7":"0.76286073","8":"0.7492355","9":"New York","10":"Liberal"},{"1":"Chicago","2":"12120","3":"0.87500000","4":"0.87196262","5":"0.87740030","6":"0.8974057","7":"0.83982684","8":"0.9666667","9":"Illinois","10":"Liberal"},{"1":"Los Angeles","2":"10100","3":"0.22821782","4":"0.15277778","5":"0.26384840","6":"0.3873874","7":"0.21767956","8":"0.3052632","9":"California","10":"Liberal"},{"1":"Washington","2":"9340","3":"0.11563169","4":"0.05677419","5":"0.15736505","6":"0.1701891","7":"0.08988764","8":"0.2307692","9":"District of Columbia","10":"Liberal"},{"1":"Houston","2":"7700","3":"0.29220779","4":"0.17373461","5":"0.39925834","6":"0.3663793","7":"0.45714286","8":"0.4081633","9":"Texas","10":"Conservative"},{"1":"Philadelphia","2":"6045","3":"0.83540116","4":"0.77689873","5":"0.89948007","6":"0.9246575","7":"0.81739130","8":"NA","9":"Pennsylvania","10":"Conservative"},{"1":"Phoenix","2":"4475","3":"0.31173184","4":"0.27080182","5":"0.42735043","6":"0.5217391","7":"0.42771084","8":"NA","9":"Arizona","10":"Conservative"},{"1":"San Diego","2":"4460","3":"0.36210762","4":"0.37298387","5":"0.34848485","6":"0.5384615","7":"0.29779412","8":"0.5156250","9":"California","10":"Liberal"},{"1":"Dallas","2":"3605","3":"0.19140083","4":"0.17150396","5":"0.21345029","6":"0.2146341","7":"0.25688073","8":"NA","9":"Texas","10":"Conservative"},{"1":"Detroit","2":"3265","3":"0.37059724","4":"0.08196721","5":"0.54278729","6":"0.5680000","7":"0.33333333","8":"NA","9":"Michigan","10":"Conservative"},{"1":"San Francisco","2":"3020","3":"0.31622517","4":"0.25949367","5":"0.37847222","6":"0.1860465","7":"0.25333333","8":"0.4861111","9":"California","10":"Liberal"},{"1":"San Antonio","2":"2955","3":"0.62436548","4":"0.44387755","5":"0.71392405","6":"0.5744681","7":"0.73913043","8":"NA","9":"Texas","10":"Conservative"},{"1":"Atlanta","2":"2950","3":"0.13728814","4":"0.18627451","5":"0.11139896","6":"0.1019830","7":"NA","8":"NA","9":"Georgia","10":"Conservative"},{"1":"Las Vegas","2":"2830","3":"0.37455830","4":"0.40000000","5":"0.30769231","6":"0.3877551","7":"0.26785714","8":"NA","9":"Nevada","10":"Liberal"},{"1":"Baltimore","2":"2800","3":"0.25714286","4":"0.13281250","5":"0.36184211","6":"0.3914591","7":"NA","8":"NA","9":"Maryland","10":"Liberal"},{"1":"Boston","2":"2560","3":"0.47656250","4":"0.44155844","5":"0.58267716","6":"0.6865672","7":"0.75000000","8":"NA","9":"Massachusetts","10":"Liberal"},{"1":"Jacksonville, Fla.","2":"2335","3":"0.80942184","4":"0.71378092","5":"0.95652174","6":"1.0000000","7":"0.88888889","8":"1.0000000","9":"Florida","10":"Conservative"},{"1":"El Paso, Texas","2":"2260","3":"0.85176991","4":"0.82644628","5":"0.86102719","6":"NA","7":"0.86102719","8":"NA","9":"Texas","10":"Conservative"},{"1":"Columbus, Ohio","2":"2245","3":"0.40534521","4":"0.37978142","5":"0.51807229","6":"0.5714286","7":"NA","8":"NA","9":"Ohio","10":"Conservative"},{"1":"Cleveland","2":"2045","3":"0.55745721","4":"0.49812734","5":"0.66901409","6":"0.5959596","7":"0.94117647","8":"NA","9":"Ohio","10":"Conservative"},{"1":"Tucson, Ariz.","2":"2020","3":"0.39851485","4":"0.41666667","5":"0.37500000","6":"NA","7":"0.33333333","8":"NA","9":"Arizona","10":"Conservative"},{"1":"Newark, N.J.","2":"2005","3":"0.27930175","4":"0.20796460","5":"0.37142857","6":"0.5194805","7":"0.26041667","8":"NA","9":"New Jersey","10":"Liberal"},{"1":"Austin, Texas","2":"1985","3":"0.29471033","4":"0.19469027","5":"0.42690058","6":"0.2500000","7":"0.45384615","8":"NA","9":"Texas","10":"Conservative"},{"1":"Memphis, Tenn.","2":"1970","3":"0.46446700","4":"0.33913044","5":"0.64024390","6":"0.6688742","7":"NA","8":"NA","9":"Tennessee","10":"Conservative"},{"1":"Milwaukee","2":"1960","3":"0.72193878","4":"0.69288390","5":"0.78400000","6":"0.9310345","7":"0.73333333","8":"NA","9":"Wisconsin","10":"Conservative"},{"1":"San Jose, Calif.","2":"1875","3":"0.46666667","4":"0.47234043","5":"0.45714286","6":"NA","7":"0.40697674","8":"0.4400000","9":"California","10":"Liberal"},{"1":"Miami","2":"1860","3":"0.07258064","4":"0.03061224","5":"0.08759124","6":"0.0000000","7":"0.11675127","8":"NA","9":"Florida","10":"Conservative"},{"1":"Denver","2":"1820","3":"0.28296703","4":"0.14932127","5":"0.48951049","6":"0.5806452","7":"0.39175258","8":"NA","9":"Colorado","10":"Liberal"},{"1":"Sacramento, Calif.","2":"1820","3":"0.07967033","4":"0.06338028","5":"0.13750000","6":"0.3200000","7":"0.00000000","8":"NA","9":"California","10":"Liberal"},{"1":"Charlotte, N.C.","2":"1780","3":"0.36235955","4":"0.29454546","5":"0.59259259","6":"0.8333333","7":"0.32142857","8":"NA","9":"North Carolina","10":"Conservative"},{"1":"Tampa, Fla.","2":"1715","3":"0.17784257","4":"0.13191489","5":"0.27777778","6":"0.2765957","7":"0.32692308","8":"NA","9":"Florida","10":"Conservative"},{"1":"Indianapolis","2":"1620","3":"0.64814815","4":"0.71042471","5":"0.40000000","6":"0.3833333","7":"NA","8":"NA","9":"Indiana","10":"Conservative"},{"1":"Santa Ana, Calif.","2":"1590","3":"0.09433962","4":"0.05882353","5":"0.12087912","6":"NA","7":"0.14864865","8":"0.0000000","9":"California","10":"Liberal"},{"1":"New Orleans","2":"1560","3":"0.50000000","4":"0.32407407","5":"0.59313726","6":"0.6237113","7":"NA","8":"NA","9":"Louisiana","10":"Conservative"},{"1":"Oakland, Calif.","2":"1530","3":"0.09477124","4":"0.02666667","5":"0.16025641","6":"0.0625000","7":"0.10810811","8":"0.2812500","9":"California","10":"Liberal"},{"1":"Orlando, Fla.","2":"1530","3":"0.11764706","4":"0.09000000","5":"0.16981132","6":"NA","7":"0.11111111","8":"NA","9":"Florida","10":"Conservative"},{"1":"Oklahoma City, Okla.","2":"1500","3":"0.59666667","4":"0.54732510","5":"0.80701754","6":"0.6296296","7":"NA","8":"NA","9":"Oklahoma","10":"Conservative"},{"1":"Seattle","2":"1445","3":"0.11764706","4":"0.11557789","5":"0.12222222","6":"0.1875000","7":"0.00000000","8":"NA","9":"Washington","10":"Liberal"},{"1":"Kansas City, Mo.","2":"1440","3":"0.77777778","4":"0.76800000","5":"0.84210526","6":"1.0000000","7":"NA","8":"NA","9":"Missouri","10":"Conservative"},{"1":"Nashville, Tenn.","2":"1440","3":"0.61805556","4":"0.43715847","5":"0.93333333","6":"0.9473684","7":"NA","8":"NA","9":"Tennessee","10":"Conservative"},{"1":"Laredo, Texas","2":"1435","3":"0.93728223","4":"0.96296296","5":"0.93133047","6":"NA","7":"0.93133047","8":"NA","9":"Texas","10":"Conservative"},{"1":"Fort Worth, Texas","2":"1430","3":"0.42657343","4":"0.30674847","5":"0.58536585","6":"0.6379310","7":"0.55932203","8":"NA","9":"Texas","10":"Conservative"},{"1":"Louisville, Ky.","2":"1430","3":"0.64685315","4":"0.62083333","5":"0.78260870","6":"0.7727273","7":"NA","8":"NA","9":"Kentucky","10":"Conservative"},{"1":"Norfolk, Va.","2":"1425","3":"0.21754386","4":"0.26708075","5":"0.15322581","6":"0.1067961","7":"NA","8":"NA","9":"Virginia","10":"Liberal"},{"1":"Arlington, Va.","2":"1360","3":"0.20220588","4":"0.22222222","5":"0.17968750","6":"0.1600000","7":"NA","8":"NA","9":"Virginia","10":"Liberal"},{"1":"Pittsburgh","2":"1350","3":"0.65925926","4":"0.67965368","5":"0.53846154","6":"0.5333333","7":"NA","8":"NA","9":"Pennsylvania","10":"Conservative"},{"1":"Albuquerque, N.M.","2":"1340","3":"0.61567164","4":"0.62962963","5":"0.60150376","6":"NA","7":"0.56637168","8":"NA","9":"New Mexico","10":"Liberal"},{"1":"Jersey City, N.J.","2":"1170","3":"0.25213675","4":"0.20645161","5":"0.34177215","6":"0.3030303","7":"0.32558139","8":"NA","9":"New Jersey","10":"Liberal"},{"1":"Raleigh, N.C.","2":"1150","3":"0.26956522","4":"0.20634921","5":"0.56097561","6":"NA","7":"NA","8":"NA","9":"North Carolina","10":"Conservative"},{"1":"Rochester, N.Y.","2":"1150","3":"0.10000000","4":"0.04093567","5":"0.27118644","6":"0.1951220","7":"NA","8":"NA","9":"New York","10":"Liberal"},{"1":"Cincinnati","2":"1145","3":"0.22707424","4":"0.14772727","5":"0.49056604","6":"0.6486486","7":"NA","8":"NA","9":"Ohio","10":"Conservative"},{"1":"Long Beach, Calif.","2":"1115","3":"0.29147982","4":"0.27722772","5":"0.30327869","6":"NA","7":"0.31250000","8":"0.0000000","9":"California","10":"Liberal"},{"1":"Birmingham, Ala.","2":"1110","3":"0.22522523","4":"0.08602150","5":"0.32558139","6":"0.3281250","7":"NA","8":"NA","9":"Alabama","10":"Conservative"},{"1":"Wichita, Kan.","2":"1075","3":"0.60000000","4":"0.51176471","5":"0.93333333","6":"NA","7":"0.89655172","8":"NA","9":"Kansas","10":"Conservative"},{"1":"Virginia Beach, Va.","2":"1070","3":"0.78971963","4":"0.75625000","5":"0.88888889","6":"0.7272727","7":"1.00000000","8":"NA","9":"Virginia","10":"Liberal"},{"1":"Fresno, Calif.","2":"1040","3":"0.51442308","4":"0.50961539","5":"0.51923077","6":"0.6818182","7":"0.46031746","8":"NA","9":"California","10":"Liberal"},{"1":"Buffalo, N.Y.","2":"1010","3":"0.33663366","4":"0.29239766","5":"0.58064516","6":"NA","7":"0.52380952","8":"NA","9":"New York","10":"Liberal"},{"1":"Minneapolis","2":"1000","3":"0.10000000","4":"0.05263158","5":"0.37931034","6":"NA","7":"NA","8":"NA","9":"Minnesota","10":"Liberal"},{"1":"Portland, Ore.","2":"1000","3":"0.21000000","4":"0.18644068","5":"0.39130435","6":"NA","7":"NA","8":"NA","9":"Oregon","10":"Liberal"},{"1":"Reno, Nev.","2":"1000","3":"0.34000000","4":"0.32386364","5":"0.45833333","6":"NA","7":"NA","8":"NA","9":"Nevada","10":"Liberal"},{"1":"Richmond, Va.","2":"1000","3":"0.11000000","4":"0.10169491","5":"0.12195122","6":"0.2083333","7":"NA","8":"NA","9":"Virginia","10":"Liberal"},{"1":"Baton Rouge, La.","2":"980","3":"0.21428571","4":"0.14406780","5":"0.32051282","6":"0.3424658","7":"NA","8":"NA","9":"Louisiana","10":"Conservative"},{"1":"Jackson, Miss.","2":"960","3":"0.39062500","4":"0.08219178","5":"0.57983193","6":"0.5798319","7":"NA","8":"NA","9":"Mississippi","10":"Conservative"},{"1":"Riverside, Calif.","2":"955","3":"0.21989529","4":"0.35000000","5":"0.07692308","6":"0.0000000","7":"0.14285714","8":"NA","9":"California","10":"Liberal"},{"1":"Fort Lauderdale, Fla.","2":"950","3":"0.16842105","4":"0.22018349","5":"0.09876543","6":"0.1025641","7":"0.11428571","8":"NA","9":"Florida","10":"Conservative"},{"1":"St. Louis","2":"950","3":"0.58947368","4":"0.53846154","5":"0.67123288","6":"0.6825397","7":"NA","8":"NA","9":"Missouri","10":"Conservative"},{"1":"Brownsville, Texas","2":"925","3":"0.51351351","4":"0.50000000","5":"0.51412429","6":"NA","7":"0.52023121","8":"NA","9":"Texas","10":"Conservative"},{"1":"Albany, N.Y.","2":"890","3":"0.18539326","4":"0.16025641","5":"0.36363636","6":"NA","7":"NA","8":"NA","9":"New York","10":"Liberal"},{"1":"Colorado Springs, Colo.","2":"860","3":"0.60465116","4":"0.55303030","5":"0.77500000","6":"NA","7":"0.91304348","8":"NA","9":"Colorado","10":"Liberal"},{"1":"Savannah, Ga.","2":"860","3":"0.21511628","4":"0.07692308","5":"0.29906542","6":"0.1707317","7":"0.75000000","8":"NA","9":"Georgia","10":"Conservative"},{"1":"Winston-Salem, N.C.","2":"860","3":"0.57558140","4":"0.42477876","5":"0.86440678","6":"0.8695652","7":"NA","8":"NA","9":"North Carolina","10":"Conservative"},{"1":"Toledo, Ohio","2":"805","3":"0.56521739","4":"0.53076923","5":"0.70967742","6":"0.7500000","7":"NA","8":"NA","9":"Ohio","10":"Conservative"},{"1":"Madison, Wis.","2":"790","3":"0.27848101","4":"0.24647887","5":"0.56250000","6":"NA","7":"NA","8":"NA","9":"Wisconsin","10":"Conservative"},{"1":"Corpus Christi, Texas","2":"770","3":"0.85714286","4":"0.89333333","5":"0.82278481","6":"NA","7":"0.84722222","8":"NA","9":"Texas","10":"Conservative"},{"1":"San Bernardino, Calif.","2":"755","3":"0.27152318","4":"0.26315789","5":"0.28000000","6":"NA","7":"0.27450980","8":"NA","9":"California","10":"Liberal"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[7],"max":[7]},"pages":{}}}
-  &lt;/script&gt;
-&lt;/div&gt;
+```
+# A tibble: 75 x 4
+           city       all                state state_ideology
+          &lt;chr&gt;     &lt;dbl&gt;                &lt;chr&gt;          &lt;chr&gt;
+ 1     New York 0.6179567             New York        Liberal
+ 2      Chicago 0.8750000             Illinois        Liberal
+ 3  Los Angeles 0.2282178           California        Liberal
+ 4   Washington 0.1156317 District of Columbia        Liberal
+ 5      Houston 0.2922078                Texas   Conservative
+ 6 Philadelphia 0.8354012         Pennsylvania   Conservative
+ 7      Phoenix 0.3117318              Arizona   Conservative
+ 8    San Diego 0.3621076           California        Liberal
+ 9       Dallas 0.1914008                Texas   Conservative
+10      Detroit 0.3705972             Michigan   Conservative
+# ... with 65 more rows
+```
 
 ---
 
-- &lt;small&gt;&lt;small&gt;Note that you may need to refresh the page for the data to appear&lt;/small&gt;&lt;/small&gt;
-
 
 ```r
-cost_of_living &lt;- read_csv("https://ismayc.github.io/Effective-Data-Storytelling-using-the-tidyverse/datasets/cost_of_living.csv")
-police_join_cost &lt;- inner_join(x = police_join, y = cost_of_living, by = "state")
-paged_table(police_join_cost)
+url &lt;- paste0("https://ismayc.github.io/",
+              "Effective-Data-Storytelling-using-the-tidyverse/",
+              "datasets/cost_of_living.csv")
+cost_of_living &lt;- read_csv(url)
+police_join_cost &lt;- inner_join(
+    x = police_join, 
+    y = cost_of_living, 
+    by = "state"
+  )
+police_join_cost %&gt;% select(-state) %&gt;% arrange(city)
 ```
 
-&lt;div data-pagedtable="false"&gt;
-  &lt;script data-pagedtable-source type="application/json"&gt;
-{"columns":[{"label":["city"],"name":[1],"type":["chr"],"align":["left"]},{"label":["force_size"],"name":[2],"type":["int"],"align":["right"]},{"label":["all"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["white"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["non_white"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["black"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["hispanic"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["asian"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["state"],"name":[9],"type":["chr"],"align":["left"]},{"label":["state_ideology"],"name":[10],"type":["chr"],"align":["left"]},{"label":["index"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["col_group"],"name":[12],"type":["chr"],"align":["left"]}],"data":[{"1":"New York","2":"32300","3":"0.61795666","4":"0.44638656","5":"0.76441894","6":"0.7708914","7":"0.76286073","8":"0.7492355","9":"New York","10":"Liberal","11":"131.0","12":"high"},{"1":"Chicago","2":"12120","3":"0.87500000","4":"0.87196262","5":"0.87740030","6":"0.8974057","7":"0.83982684","8":"0.9666667","9":"Illinois","10":"Liberal","11":"94.6","12":"low"},{"1":"Los Angeles","2":"10100","3":"0.22821782","4":"0.15277778","5":"0.26384840","6":"0.3873874","7":"0.21767956","8":"0.3052632","9":"California","10":"Liberal","11":"135.9","12":"high"},{"1":"Washington","2":"9340","3":"0.11563169","4":"0.05677419","5":"0.15736505","6":"0.1701891","7":"0.08988764","8":"0.2307692","9":"District of Columbia","10":"Liberal","11":"151.6","12":"high"},{"1":"Houston","2":"7700","3":"0.29220779","4":"0.17373461","5":"0.39925834","6":"0.3663793","7":"0.45714286","8":"0.4081633","9":"Texas","10":"Conservative","11":"90.7","12":"low"},{"1":"Philadelphia","2":"6045","3":"0.83540116","4":"0.77689873","5":"0.89948007","6":"0.9246575","7":"0.81739130","8":"NA","9":"Pennsylvania","10":"Conservative","11":"101.4","12":"mid"},{"1":"Phoenix","2":"4475","3":"0.31173184","4":"0.27080182","5":"0.42735043","6":"0.5217391","7":"0.42771084","8":"NA","9":"Arizona","10":"Conservative","11":"98.0","12":"mid"},{"1":"San Diego","2":"4460","3":"0.36210762","4":"0.37298387","5":"0.34848485","6":"0.5384615","7":"0.29779412","8":"0.5156250","9":"California","10":"Liberal","11":"135.9","12":"high"},{"1":"Dallas","2":"3605","3":"0.19140083","4":"0.17150396","5":"0.21345029","6":"0.2146341","7":"0.25688073","8":"NA","9":"Texas","10":"Conservative","11":"90.7","12":"low"},{"1":"Detroit","2":"3265","3":"0.37059724","4":"0.08196721","5":"0.54278729","6":"0.5680000","7":"0.33333333","8":"NA","9":"Michigan","10":"Conservative","11":"89.0","12":"low"},{"1":"San Francisco","2":"3020","3":"0.31622517","4":"0.25949367","5":"0.37847222","6":"0.1860465","7":"0.25333333","8":"0.4861111","9":"California","10":"Liberal","11":"135.9","12":"high"},{"1":"San Antonio","2":"2955","3":"0.62436548","4":"0.44387755","5":"0.71392405","6":"0.5744681","7":"0.73913043","8":"NA","9":"Texas","10":"Conservative","11":"90.7","12":"low"},{"1":"Atlanta","2":"2950","3":"0.13728814","4":"0.18627451","5":"0.11139896","6":"0.1019830","7":"NA","8":"NA","9":"Georgia","10":"Conservative","11":"91.4","12":"low"},{"1":"Las Vegas","2":"2830","3":"0.37455830","4":"0.40000000","5":"0.30769231","6":"0.3877551","7":"0.26785714","8":"NA","9":"Nevada","10":"Liberal","11":"103.3","12":"mid"},{"1":"Baltimore","2":"2800","3":"0.25714286","4":"0.13281250","5":"0.36184211","6":"0.3914591","7":"NA","8":"NA","9":"Maryland","10":"Liberal","11":"125.5","12":"high"},{"1":"Boston","2":"2560","3":"0.47656250","4":"0.44155844","5":"0.58267716","6":"0.6865672","7":"0.75000000","8":"NA","9":"Massachusetts","10":"Liberal","11":"133.4","12":"high"},{"1":"Jacksonville, Fla.","2":"2335","3":"0.80942184","4":"0.71378092","5":"0.95652174","6":"1.0000000","7":"0.88888889","8":"1.0000000","9":"Florida","10":"Conservative","11":"98.3","12":"mid"},{"1":"El Paso, Texas","2":"2260","3":"0.85176991","4":"0.82644628","5":"0.86102719","6":"NA","7":"0.86102719","8":"NA","9":"Texas","10":"Conservative","11":"90.7","12":"low"},{"1":"Columbus, Ohio","2":"2245","3":"0.40534521","4":"0.37978142","5":"0.51807229","6":"0.5714286","7":"NA","8":"NA","9":"Ohio","10":"Conservative","11":"93.8","12":"low"},{"1":"Cleveland","2":"2045","3":"0.55745721","4":"0.49812734","5":"0.66901409","6":"0.5959596","7":"0.94117647","8":"NA","9":"Ohio","10":"Conservative","11":"93.8","12":"low"},{"1":"Tucson, Ariz.","2":"2020","3":"0.39851485","4":"0.41666667","5":"0.37500000","6":"NA","7":"0.33333333","8":"NA","9":"Arizona","10":"Conservative","11":"98.0","12":"mid"},{"1":"Newark, N.J.","2":"2005","3":"0.27930175","4":"0.20796460","5":"0.37142857","6":"0.5194805","7":"0.26041667","8":"NA","9":"New Jersey","10":"Liberal","11":"121.9","12":"high"},{"1":"Austin, Texas","2":"1985","3":"0.29471033","4":"0.19469027","5":"0.42690058","6":"0.2500000","7":"0.45384615","8":"NA","9":"Texas","10":"Conservative","11":"90.7","12":"low"},{"1":"Memphis, Tenn.","2":"1970","3":"0.46446700","4":"0.33913044","5":"0.64024390","6":"0.6688742","7":"NA","8":"NA","9":"Tennessee","10":"Conservative","11":"89.4","12":"low"},{"1":"Milwaukee","2":"1960","3":"0.72193878","4":"0.69288390","5":"0.78400000","6":"0.9310345","7":"0.73333333","8":"NA","9":"Wisconsin","10":"Conservative","11":"96.8","12":"mid"},{"1":"San Jose, Calif.","2":"1875","3":"0.46666667","4":"0.47234043","5":"0.45714286","6":"NA","7":"0.40697674","8":"0.4400000","9":"California","10":"Liberal","11":"135.9","12":"high"},{"1":"Miami","2":"1860","3":"0.07258064","4":"0.03061224","5":"0.08759124","6":"0.0000000","7":"0.11675127","8":"NA","9":"Florida","10":"Conservative","11":"98.3","12":"mid"},{"1":"Denver","2":"1820","3":"0.28296703","4":"0.14932127","5":"0.48951049","6":"0.5806452","7":"0.39175258","8":"NA","9":"Colorado","10":"Liberal","11":"103.8","12":"mid"},{"1":"Sacramento, Calif.","2":"1820","3":"0.07967033","4":"0.06338028","5":"0.13750000","6":"0.3200000","7":"0.00000000","8":"NA","9":"California","10":"Liberal","11":"135.9","12":"high"},{"1":"Charlotte, N.C.","2":"1780","3":"0.36235955","4":"0.29454546","5":"0.59259259","6":"0.8333333","7":"0.32142857","8":"NA","9":"North Carolina","10":"Conservative","11":"93.9","12":"low"},{"1":"Tampa, Fla.","2":"1715","3":"0.17784257","4":"0.13191489","5":"0.27777778","6":"0.2765957","7":"0.32692308","8":"NA","9":"Florida","10":"Conservative","11":"98.3","12":"mid"},{"1":"Indianapolis","2":"1620","3":"0.64814815","4":"0.71042471","5":"0.40000000","6":"0.3833333","7":"NA","8":"NA","9":"Indiana","10":"Conservative","11":"89.5","12":"low"},{"1":"Santa Ana, Calif.","2":"1590","3":"0.09433962","4":"0.05882353","5":"0.12087912","6":"NA","7":"0.14864865","8":"0.0000000","9":"California","10":"Liberal","11":"135.9","12":"high"},{"1":"New Orleans","2":"1560","3":"0.50000000","4":"0.32407407","5":"0.59313726","6":"0.6237113","7":"NA","8":"NA","9":"Louisiana","10":"Conservative","11":"94.8","12":"low"},{"1":"Oakland, Calif.","2":"1530","3":"0.09477124","4":"0.02666667","5":"0.16025641","6":"0.0625000","7":"0.10810811","8":"0.2812500","9":"California","10":"Liberal","11":"135.9","12":"high"},{"1":"Orlando, Fla.","2":"1530","3":"0.11764706","4":"0.09000000","5":"0.16981132","6":"NA","7":"0.11111111","8":"NA","9":"Florida","10":"Conservative","11":"98.3","12":"mid"},{"1":"Oklahoma City, Okla.","2":"1500","3":"0.59666667","4":"0.54732510","5":"0.80701754","6":"0.6296296","7":"NA","8":"NA","9":"Oklahoma","10":"Conservative","11":"89.2","12":"low"},{"1":"Seattle","2":"1445","3":"0.11764706","4":"0.11557789","5":"0.12222222","6":"0.1875000","7":"0.00000000","8":"NA","9":"Washington","10":"Liberal","11":"105.2","12":"high"},{"1":"Kansas City, Mo.","2":"1440","3":"0.77777778","4":"0.76800000","5":"0.84210526","6":"1.0000000","7":"NA","8":"NA","9":"Missouri","10":"Conservative","11":"90.4","12":"low"},{"1":"Nashville, Tenn.","2":"1440","3":"0.61805556","4":"0.43715847","5":"0.93333333","6":"0.9473684","7":"NA","8":"NA","9":"Tennessee","10":"Conservative","11":"89.4","12":"low"},{"1":"Laredo, Texas","2":"1435","3":"0.93728223","4":"0.96296296","5":"0.93133047","6":"NA","7":"0.93133047","8":"NA","9":"Texas","10":"Conservative","11":"90.7","12":"low"},{"1":"Fort Worth, Texas","2":"1430","3":"0.42657343","4":"0.30674847","5":"0.58536585","6":"0.6379310","7":"0.55932203","8":"NA","9":"Texas","10":"Conservative","11":"90.7","12":"low"},{"1":"Louisville, Ky.","2":"1430","3":"0.64685315","4":"0.62083333","5":"0.78260870","6":"0.7727273","7":"NA","8":"NA","9":"Kentucky","10":"Conservative","11":"90.5","12":"low"},{"1":"Norfolk, Va.","2":"1425","3":"0.21754386","4":"0.26708075","5":"0.15322581","6":"0.1067961","7":"NA","8":"NA","9":"Virginia","10":"Liberal","11":"100.8","12":"mid"},{"1":"Arlington, Va.","2":"1360","3":"0.20220588","4":"0.22222222","5":"0.17968750","6":"0.1600000","7":"NA","8":"NA","9":"Virginia","10":"Liberal","11":"100.8","12":"mid"},{"1":"Pittsburgh","2":"1350","3":"0.65925926","4":"0.67965368","5":"0.53846154","6":"0.5333333","7":"NA","8":"NA","9":"Pennsylvania","10":"Conservative","11":"101.4","12":"mid"},{"1":"Albuquerque, N.M.","2":"1340","3":"0.61567164","4":"0.62962963","5":"0.60150376","6":"NA","7":"0.56637168","8":"NA","9":"New Mexico","10":"Liberal","11":"96.5","12":"mid"},{"1":"Jersey City, N.J.","2":"1170","3":"0.25213675","4":"0.20645161","5":"0.34177215","6":"0.3030303","7":"0.32558139","8":"NA","9":"New Jersey","10":"Liberal","11":"121.9","12":"high"},{"1":"Raleigh, N.C.","2":"1150","3":"0.26956522","4":"0.20634921","5":"0.56097561","6":"NA","7":"NA","8":"NA","9":"North Carolina","10":"Conservative","11":"93.9","12":"low"},{"1":"Rochester, N.Y.","2":"1150","3":"0.10000000","4":"0.04093567","5":"0.27118644","6":"0.1951220","7":"NA","8":"NA","9":"New York","10":"Liberal","11":"131.0","12":"high"},{"1":"Cincinnati","2":"1145","3":"0.22707424","4":"0.14772727","5":"0.49056604","6":"0.6486486","7":"NA","8":"NA","9":"Ohio","10":"Conservative","11":"93.8","12":"low"},{"1":"Long Beach, Calif.","2":"1115","3":"0.29147982","4":"0.27722772","5":"0.30327869","6":"NA","7":"0.31250000","8":"0.0000000","9":"California","10":"Liberal","11":"135.9","12":"high"},{"1":"Birmingham, Ala.","2":"1110","3":"0.22522523","4":"0.08602150","5":"0.32558139","6":"0.3281250","7":"NA","8":"NA","9":"Alabama","10":"Conservative","11":"91.2","12":"low"},{"1":"Wichita, Kan.","2":"1075","3":"0.60000000","4":"0.51176471","5":"0.93333333","6":"NA","7":"0.89655172","8":"NA","9":"Kansas","10":"Conservative","11":"89.9","12":"low"},{"1":"Virginia Beach, Va.","2":"1070","3":"0.78971963","4":"0.75625000","5":"0.88888889","6":"0.7272727","7":"1.00000000","8":"NA","9":"Virginia","10":"Liberal","11":"100.8","12":"mid"},{"1":"Fresno, Calif.","2":"1040","3":"0.51442308","4":"0.50961539","5":"0.51923077","6":"0.6818182","7":"0.46031746","8":"NA","9":"California","10":"Liberal","11":"135.9","12":"high"},{"1":"Buffalo, N.Y.","2":"1010","3":"0.33663366","4":"0.29239766","5":"0.58064516","6":"NA","7":"0.52380952","8":"NA","9":"New York","10":"Liberal","11":"131.0","12":"high"},{"1":"Minneapolis","2":"1000","3":"0.10000000","4":"0.05263158","5":"0.37931034","6":"NA","7":"NA","8":"NA","9":"Minnesota","10":"Liberal","11":"100.8","12":"mid"},{"1":"Portland, Ore.","2":"1000","3":"0.21000000","4":"0.18644068","5":"0.39130435","6":"NA","7":"NA","8":"NA","9":"Oregon","10":"Liberal","11":"115.6","12":"high"},{"1":"Reno, Nev.","2":"1000","3":"0.34000000","4":"0.32386364","5":"0.45833333","6":"NA","7":"NA","8":"NA","9":"Nevada","10":"Liberal","11":"103.3","12":"mid"},{"1":"Richmond, Va.","2":"1000","3":"0.11000000","4":"0.10169491","5":"0.12195122","6":"0.2083333","7":"NA","8":"NA","9":"Virginia","10":"Liberal","11":"100.8","12":"mid"},{"1":"Baton Rouge, La.","2":"980","3":"0.21428571","4":"0.14406780","5":"0.32051282","6":"0.3424658","7":"NA","8":"NA","9":"Louisiana","10":"Conservative","11":"94.8","12":"low"},{"1":"Jackson, Miss.","2":"960","3":"0.39062500","4":"0.08219178","5":"0.57983193","6":"0.5798319","7":"NA","8":"NA","9":"Mississippi","10":"Conservative","11":"85.9","12":"low"},{"1":"Riverside, Calif.","2":"955","3":"0.21989529","4":"0.35000000","5":"0.07692308","6":"0.0000000","7":"0.14285714","8":"NA","9":"California","10":"Liberal","11":"135.9","12":"high"},{"1":"Fort Lauderdale, Fla.","2":"950","3":"0.16842105","4":"0.22018349","5":"0.09876543","6":"0.1025641","7":"0.11428571","8":"NA","9":"Florida","10":"Conservative","11":"98.3","12":"mid"},{"1":"St. Louis","2":"950","3":"0.58947368","4":"0.53846154","5":"0.67123288","6":"0.6825397","7":"NA","8":"NA","9":"Missouri","10":"Conservative","11":"90.4","12":"low"},{"1":"Brownsville, Texas","2":"925","3":"0.51351351","4":"0.50000000","5":"0.51412429","6":"NA","7":"0.52023121","8":"NA","9":"Texas","10":"Conservative","11":"90.7","12":"low"},{"1":"Albany, N.Y.","2":"890","3":"0.18539326","4":"0.16025641","5":"0.36363636","6":"NA","7":"NA","8":"NA","9":"New York","10":"Liberal","11":"131.0","12":"high"},{"1":"Colorado Springs, Colo.","2":"860","3":"0.60465116","4":"0.55303030","5":"0.77500000","6":"NA","7":"0.91304348","8":"NA","9":"Colorado","10":"Liberal","11":"103.8","12":"mid"},{"1":"Savannah, Ga.","2":"860","3":"0.21511628","4":"0.07692308","5":"0.29906542","6":"0.1707317","7":"0.75000000","8":"NA","9":"Georgia","10":"Conservative","11":"91.4","12":"low"},{"1":"Winston-Salem, N.C.","2":"860","3":"0.57558140","4":"0.42477876","5":"0.86440678","6":"0.8695652","7":"NA","8":"NA","9":"North Carolina","10":"Conservative","11":"93.9","12":"low"},{"1":"Toledo, Ohio","2":"805","3":"0.56521739","4":"0.53076923","5":"0.70967742","6":"0.7500000","7":"NA","8":"NA","9":"Ohio","10":"Conservative","11":"93.8","12":"low"},{"1":"Madison, Wis.","2":"790","3":"0.27848101","4":"0.24647887","5":"0.56250000","6":"NA","7":"NA","8":"NA","9":"Wisconsin","10":"Conservative","11":"96.8","12":"mid"},{"1":"Corpus Christi, Texas","2":"770","3":"0.85714286","4":"0.89333333","5":"0.82278481","6":"NA","7":"0.84722222","8":"NA","9":"Texas","10":"Conservative","11":"90.7","12":"low"},{"1":"San Bernardino, Calif.","2":"755","3":"0.27152318","4":"0.26315789","5":"0.28000000","6":"NA","7":"0.27450980","8":"NA","9":"California","10":"Liberal","11":"135.9","12":"high"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[16],"max":[16]},"pages":{}}}
-  &lt;/script&gt;
-&lt;/div&gt;
+```
+# A tibble: 75 x 5
+                 city       all state_ideology index col_group
+                &lt;chr&gt;     &lt;dbl&gt;          &lt;chr&gt; &lt;dbl&gt;     &lt;chr&gt;
+ 1       Albany, N.Y. 0.1853933        Liberal 131.0      high
+ 2  Albuquerque, N.M. 0.6156716        Liberal  96.5       mid
+ 3     Arlington, Va. 0.2022059        Liberal 100.8       mid
+ 4            Atlanta 0.1372881   Conservative  91.4       low
+ 5      Austin, Texas 0.2947103   Conservative  90.7       low
+ 6          Baltimore 0.2571429        Liberal 125.5      high
+ 7   Baton Rouge, La. 0.2142857   Conservative  94.8       low
+ 8   Birmingham, Ala. 0.2252252   Conservative  91.2       low
+ 9             Boston 0.4765625        Liberal 133.4      high
+10 Brownsville, Texas 0.5135135   Conservative  90.7       low
+# ... with 65 more rows
+```
 
 ---
 
@@ -1101,11 +1280,11 @@ paged_table(police_join_cost)
 ```r
 ggplot(data = police_join_cost,
        mapping = aes(x = index, y = all)) +
-  geom_point(aes(color = state_ideology)) +
+  geom_point(mapping = aes(color = state_ideology)) +
   labs(x = "Cost of Living Index", y = "% Officers Living in City")
 ```
 
-![](slide_deck_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1121,11 +1300,18 @@ Use the 5MV to answer problems from R data packages, e.g., [`nycflights13` `\(\r
 
 ---
 
+
+class: inverse, center, middle
+
+# DEMO of `dplyr` in RStudio
+
+---
+
 ## Homework for tomorrow
 
-- Use the `readr`, `readxl`, and `haven` packages to read in data from CSVs, Excel XLS files, STATA/SPSS files
+- Review the Data Import cheatsheet and use the `readr`, `readxl`, and `haven` packages to read in data from CSVs, Excel XLS/XLSX files, STATA/SPSS files
 
-- Use `ggplot2` and `dplyr` to make graphics and produce data wrangling on data sets of interest to you
+- Use `ggplot2` and `dplyr` to make graphics and produce data wrangling on data sets of interest to you read in from the previous step
 
 &lt;br&gt;
 
