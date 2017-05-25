@@ -2,4 +2,11 @@
 title: "Slides"
 ---
 
-A link to HTML slides will appear [here]().  (In development)
+Slides are available as 
+
+  - an HTML file <a href="slides/slide_deck.html" target="_blank">here</a>
+
+<!--  
+  - a PDF file <a href="slides/slide_deck.pdf" target = "_blank">here</a>
+  - a running HTML document <a href="slides/slide_document.html" target = "blank">here</a>
+-->  

@@ -11,4 +11,6 @@ This website will contain materials and links to resources discussed at the Reed
 ## Resources
 
 - [ModernDive:  An Introduction to Statistical and Data Sciences via R](http://moderndive.com)
-- [Effective Data Storytelling using the tidyverse - DataCamp course](https://www.datacamp.com/courses/effective-data-storytelling-using-the-tidyverse)
+- [Introduction to R - Free DataCamp course](https://www.datacamp.com/courses/free-introduction-to-r)
+- [Effective Data Storytelling using the tidyverse - Free DataCamp course](https://www.datacamp.com/courses/effective-data-storytelling-using-the-tidyverse)
+- [Getting Used to R, RStudio, and R Markdown](https://ismayc.github.io/rbasics-book/)

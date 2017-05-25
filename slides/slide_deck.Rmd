@@ -1,0 +1,936 @@
+---
+title: Putting the [`R`]() in [`R`]()eed and <br> in Lewis and Cla[`R`]()k
+author: "Chester Ismay <br><br> GitHub: [`ismayc`](https://github.com/ismayc) <br> Twitter:  [`@old_man_chester`](https://twitter.com/old_man_chester)"
+date: 2017-05-25 & 2017-05-26 <br><br> Bootcamp website at <http://bit.ly/rbootcamp17> <br> Slides available at <http://bit.ly/rbootcamp17-slides>
+output: 
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      highlightLanguage: r
+    countIncrementalSlides: false
+    css: example.css
+---
+
+class: inverse, center, middle
+
+<!-- Write slide link on whiteboard -->
+
+```{r include=FALSE}
+#options(servr.daemon = TRUE)
+library(tidyverse)
+library(mosaic)
+library(stringr)
+library(okcupiddata)
+library(knitr)
+filter <- dplyr::filter
+knitr::opts_chunk$set(warning=FALSE, message=FALSE, fig.width=9.5, fig.height=4.5, 
+  comment=NA, rows.print=16)
+theme_set(theme_gray(base_size = 24))
+```
+
+# Pre-bootcamp HW
+
+## Talk about your analysis on the <br> `weather` data <br> in groups of 2-3
+
+---
+
+# Let's get it all out there
+
+## When you think of R what comes to mind?
+
+---
+
+class: inverse, center, middle
+
+# DEMO in RStudio <br> with R Markdown
+
+---
+
+## What this bootcamp is
+
+![](https://ourcodingclub.github.io/img/tidyverse.png)
+
+- Designed for all levels of knowledge and background
+
+---
+
+## What this bootcamp is not
+
+- A thorough development of machine learning <br> techniques applied to big data
+
+--
+
+- A discussion on the role of _p_-values in science
+
+--
+
+- A tutorial on how to work with base R subsetting and base R graphics 
+
+---
+
+## What I hope you'll learn
+
+- That R is not as scary as it used to be.  
+
+--
+
+- Learning how to Google is an incredibly valuable skill.
+
+--
+
+- That having students turn in assignments using R Markdown provides an efficient way to check their work and their analyses easily.
+
+---
+
+## What I hope you'll learn
+
+- That the R packages you will use in this workshop are the same ones that are used by scientists and graduate programs all over the world
+
+--
+
+- That teaching students how to use open-source tools is what is best for them long term
+
+--
+
+- That students with no programming background can do great things in only a few weeks
+    - [Sociology/Criminal Justice majors at Pacific U.](https://ismayc.github.io/soc301_s2017/group-projects/index.html)
+    - [A wide range of students at Middlebury College](https://rudeboybert.github.io/MATH116/PS/final_project/final_project_outline.html)
+
+---
+
+class: inverse, center, middle
+
+# R Data Types
+
+---
+
+## The bare minimum needed for understanding today
+
+Vector/variable
+  - Type of vector (`int`, `num`, `chr`, `lgl`, `date`)
+
+--
+
+Data frame
+  - Vectors of (potentially) different types
+  - Each vector has the same number of rows
+  
+---
+
+class: center, middle  
+  
+# Welcome to the [tidyverse](https://blog.rstudio.org/2016/09/15/tidyverse-1-0-0/)!
+  
+The `tidyverse` is a collection of R packages that share common philosophies and are designed to work together. <br><br> 
+  
+<a href="http://tidyverse.tidyverse.org/logo.png"><img src="figure/tidyverse.png" style="width: 200px;"/><a>
+
+---
+
+
+## Beginning steps
+
+Frequently the first thing to do when given a dataset is to
+- identify the observational unit,
+- specify the variables,
+- give the types of variables you are presented with, and
+- check that the data is <u>tidy</u>. (TO COME)
+
+This will help with 
+- choosing the appropriate plot, 
+- summarizing the data, and 
+- understanding which inferences can be applied.
+
+---
+
+class: inverse, center, middle
+
+# Data Visualization
+
+<a href="http://gitsense.github.io/images/wealth.gif"><img src="figure/wealth.gif" style="width: 770px;"/></a>
+
+Inspired by [Hans Rosling](https://www.youtube.com/watch?v=jbkSRLYSojo)
+
+---
+
+```{r echo=FALSE,fig.height=6, fig.width=10, fig.align='center'}
+library(gapminder)
+options(scipen = 99)
+#gap_with_colors <-
+#  data.frame(gapminder,
+#             cc = I(country_colors[match(gapminder$country,
+#                                         names(country_colors))]))
+
+gapminder %>% filter(year == 1992) %>%
+  ggplot(aes(x = log(gdpPercap, base = 10), y = lifeExp, color = continent,
+             size = pop)) +
+  geom_point() + xlab('Gross Domestic Product (log scale)') + ylab('Life Expectancy at birth (years)') + ggtitle("Gapminder for 1992")
+
+#+
+#  scale_color_manual(values = gapminder::continent_colors)
+```
+
+
+- What are the variables here?
+- What is the observational unit?
+- How are the variables mapped to aesthetics?
+
+---
+
+
+## Grammar of Graphics
+
+.left-column[
+Wilkinson (2005) laid out the proposed "Grammar of Graphics"
+]
+
+.right-column[
+<a href="http://www.powells.com/book/the-grammar-of-graphics-9780387245447"><img src="figure/graphics.jpg" style="width: 300px;"></a>
+]
+
+---
+
+## Grammar of Graphics in R
+
+.left-column[
+Wickham implemented the grammar in R in the `ggplot2` package
+]
+
+.right-column[
+<a href="http://www.powells.com/book/ggplot2-elegant-graphics-for-data-analysis-9783319242750/68-428"><img src="figure/ggplot2.jpg" style="width: 300px;"></a>
+]
+
+---
+
+## Grammar of Graphics elsewhere
+
+- [Make plots online with plotly](https://plot.ly/)
+
+- [Leland Wilkinson](https://research.tableau.com/user/leland-wilkinson) works at [Tableau](https://www.tableau.com/)
+
+- The Grammar of Graphics provides a theoretical framework for building and deciphering statistical graphics
+
+---
+
+class: center, middle
+
+# What is a statistical graphic?
+--
+
+## A `mapping` of <br> `data` variables
+--
+
+## to <br> `aes()`thetic attributes
+
+--
+## of <br> `geom_`etric objects.
+
+---
+
+class: inverse, center, middle
+
+# Back to basics
+
+---
+
+### Consider the following data in tidy format:
+
+```{r echo=FALSE}
+simple_ex <-
+  data_frame(
+    A = c(1980, 1990, 2000, 2010),
+    B = c(1, 2, 3, 4),
+    C = c(3, 2, 1, 2),
+    D = c("low", "low", "high", "high")
+  )
+simple_ex %>% knitr::kable(format="html")
+```
+
+<!-- Copy to chalkboard/whiteboard -->
+
+- Sketch the graphics below on paper, where the `x`-axis is variable `A` and the `y`-axis is variable `B`
+
+1. <small>A scatter plot</small>
+1. <small>A scatter plot where the `color` of the points corresponds to `D`</small>
+1. <small>A scatter plot where the `size` of the points corresponds to `C`</small>
+1. <small>A line graph</small>
+1. <small>A line graph where the `color` of the line corresponds to `D` with points added that are all green of size 4.</small>
+
+---
+
+## Reproducing the plots in <small>`ggplot2`</small>
+
+### 1. A scatterplot
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(data = simple_ex, mapping = aes(x = A, y = B)) + 
+  geom_point()
+```
+--
+
+```{r, echo=FALSE, fig.height=4.5}
+ggplot(data = simple_ex, aes(x = A, y = B)) + 
+  geom_point()
+```
+
+
+---
+
+
+## Reproducing the plots in <small>`ggplot2`</small>
+
+### 2. A scatter plot where the `color` of the points corresponds to `group`
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(data = simple_ex, mapping = aes(x = A, y = B)) + 
+  geom_point(mapping = aes(color = D))
+```
+--
+
+```{r, echo=FALSE, fig.height=4.5}
+ggplot(data = simple_ex, mapping = aes(x = A, y = B)) + 
+  geom_point(mapping = aes(color = D))
+```
+
+
+---
+
+## Reproducing the plots in <small>`ggplot2`</small>
+
+### 3. A scatter plot where the `size` of the points corresponds to `C`
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(data = simple_ex, mapping = aes(x = A, y = B, size = C)) + 
+  geom_point()
+```
+--
+
+```{r, echo=FALSE, fig.height=4.5}
+ggplot(data = simple_ex, mapping = aes(x = A, y = B, size = C)) + 
+  geom_point()
+```
+
+
+---
+
+## Reproducing the plots in <small>`ggplot2`</small>
+
+### 4. A line graph
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(data = simple_ex, mapping = aes(x = A, y = B)) + 
+  geom_line()
+```
+--
+
+```{r, echo=FALSE, fig.height=4.5}
+ggplot(data = simple_ex, aes(x = A, y = B)) + 
+  geom_line()
+```
+
+
+---
+
+## Reproducing the plots in <small>`ggplot2`</small>
+
+### 5. A line graph where the `color` of the line corresponds to `D` with points added that are all blue of size 4.
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(data = simple_ex, mapping = aes(x = A, y = B)) + 
+  geom_line(mapping = aes(color = D)) +
+  geom_point(color = "blue", size = 4)
+```
+--
+
+```{r, echo=FALSE, fig.height=4}
+ggplot(data = simple_ex, mapping = aes(x = A, y = B)) + 
+  geom_line(mapping = aes(color = D)) +
+  geom_point(color = "blue", size = 4)
+```
+
+---
+
+# The Five-Named Graphs 
+
+## The 5NG of data viz
+
+- Scatterplot: `geom_point()`
+- Line graph: `geom_line()`
+--
+
+- Histogram: `geom_histogram()`
+- Boxplot: `geom_boxplot()`
+- Bar graph: `geom_bar()`
+
+
+---
+
+class: center, middle
+
+## More `ggplot2` examples
+
+---
+
+## Histogram
+
+```{r fig.height=5.5}
+library(nycflights13)
+ggplot(data = weather, mapping = aes(x = humid)) +
+  geom_histogram(bins = 20, color = "black", fill = "darkorange")
+```
+
+---
+
+## Boxplot (broken)
+
+```{r fig.height=5.5}
+library(nycflights13)
+ggplot(data = weather, mapping = aes(x = month, y = humid)) +
+  geom_boxplot()
+```
+
+---
+
+
+## Boxplot (fixed)
+
+```{r fig.height=5.5}
+library(nycflights13)
+ggplot(data = weather, mapping = aes(x = month, group = month, y = humid)) +
+  geom_boxplot()
+```
+
+---
+
+## Bar graph
+
+```{r}
+library(fivethirtyeight)
+ggplot(data = bechdel, mapping = aes(x = clean_test)) +
+  geom_bar()
+```
+
+---
+
+## How about over time?
+
+- Hop into `dplyr`
+
+```{r}
+library(dplyr)
+year_bins <- c("'70-'74", "'75-'79", "'80-'84", "'85-'89",
+               "'90-'94", "'95-'99", "'00-'04", "'05-'09",
+               "'10-'13")
+bechdel <- bechdel %>%
+  mutate(five_year = cut(year, 
+                         breaks = seq(1969, 2014, 5), 
+                         labels = year_bins)) %>% 
+  mutate(clean_test = factor(clean_test, 
+                             levels = c("nowomen", "notalk", "men",
+                                        "dubious", "ok")))
+```
+
+---
+
+## How about over time? (Stacked)
+
+```{r fig.width=11}
+library(fivethirtyeight)
+library(ggplot2)
+ggplot(data = bechdel,
+       mapping = aes(x = five_year, fill = clean_test)) +
+  geom_bar()
+```
+
+---
+
+## How about over time? (Side-by-side)
+
+```{r fig.width=11}
+library(fivethirtyeight)
+library(ggplot2)
+ggplot(data = bechdel,
+       mapping = aes(x = five_year, fill = clean_test)) +
+  geom_bar(position = "dodge")
+```
+
+---
+
+## How about over time? (Stacked proportional)
+
+```{r fig.width=11}
+library(fivethirtyeight)
+library(ggplot2)
+ggplot(data = bechdel,
+       mapping = aes(x = five_year, fill = clean_test)) +
+  geom_bar(position = "fill", color = "black")
+```
+
+---
+
+class: center, middle
+
+## `ggplot2` is for beginners and <br> for data science professionals!
+
+<a href="https://fivethirtyeight.com/features/the-dollar-and-cents-case-against-hollywoods-exclusion-of-women/"><img src="figure/bechdel.png" style="width: 500px;"/><a>
+
+---
+
+## Practice
+
+Produce appropriate 5NG with R package & data set in [ ], e.g., [`nycflights13` $\rightarrow$ `weather`] 
+
+<!--
+Try to look through the help documentation/Google to improve your plots
+-->
+
+1. Does `age` predict `recline_rude`? <br> [`fivethirtyeight` $\rightarrow$ `na.omit(flying)`]
+
+2. Distribution of `age` by `sex` <br> [`okcupiddata` $\rightarrow$ `profiles`]
+
+3. Does `budget` predict `rating`? <br> [`ggplot2movies` $\rightarrow$ `movies`]
+
+4. Distribution of log base 10 scale of `budget_2013` <br> [`fivethirtyeight` $\rightarrow$ `bechdel`]
+
+---
+
+### HINTS
+
+```{r echo=FALSE, fig.height=7, fig.width=10.5}
+library(gridExtra)
+library(fivethirtyeight)
+library(ggplot2movies)
+library(okcupiddata)
+
+p1 <- ggplot(data = na.omit(flying), mapping = aes(fill = recline_rude, x = age)) + geom_bar(position = "fill") + ggtitle("Problem 1") + theme_gray(base_size = 20)
+
+p2 <- ggplot(data = profiles, mapping = aes(x = sex, y = age)) +
+  geom_boxplot() + ggtitle("Problem 2") + theme_gray(base_size = 20)
+
+p3 <- ggplot(data = movies, mapping = aes(x = budget, y = rating)) +
+  geom_point() + ggtitle("Problem 3") + theme_gray(base_size = 20)
+
+p4 <- ggplot(data = bechdel, mapping = aes(x = log(budget_2013, 10))) +
+  geom_histogram(color = "white", bins = 10) + ggtitle("Problem 4") +
+  theme_gray(base_size = 20)
+
+grid.arrange(p1, p2, p3, p4, ncol = 2, padding = unit(0.5, "line"),
+             widths = c(2.6, 1.4))
+
+```
+
+
+
+---
+
+class: inverse, center, middle
+
+# DEMO of `ggplot2` in RStudio
+
+---
+
+class: center, middle
+
+### Determining the appropriate plot
+
+<a href="https://coggle.it/diagram/V_G2gzukTDoQ-aZt"><img src="figure/viz_mindmap.png" style="width: 400px;"/><a>
+
+---
+
+class: inverse, center, middle
+
+# Data Wrangling
+
+---
+
+### `gapminder` data frame in the `gapminder` package
+
+```{r rows.print=15}
+library(gapminder)
+gapminder
+```
+
+---
+
+## Base R versus the `tidyverse`
+
+Say we wanted mean life expectancy across all years for Asia
+--
+
+```{r}
+# Base R
+asia <- gapminder[gapminder$continent == "Asia", ]
+mean(asia$lifeExp)
+```
+--
+ 
+```{r}
+library(dplyr)
+gapminder %>% filter(continent == "Asia") %>%
+  summarize(mean_exp = mean(lifeExp))
+```
+
+---
+
+## The pipe `%>%`
+
+`r knitr::include_graphics("figure/pipe.png")` &emsp; &emsp;`r knitr::include_graphics("figure/MagrittePipe.jpg")`
+--
+
+- A way to chain together commands
+--
+
+- It is *essentially* the `dplyr` equivalent to the <br> `+` in `ggplot2`
+
+---
+
+## The 5NG of data viz
+--
+
+### `geom_point()`<br> `geom_line()` <br> `geom_histogram()`<br>  `geom_boxplot()`<br> `geom_bar()`
+
+---
+
+# The Five Main Verbs (5MV) of data wrangling
+
+### `filter()` <br> `summarize()` <br> `group_by()` <br> `mutate()` <br> `arrange()`
+
+---
+
+## `filter()`
+
+- Select a subset of the rows of a data frame. 
+
+- The arguments are the "filters" that you'd like to apply.
+--
+
+```{r}
+library(gapminder); library(dplyr)
+gap_2007 <- gapminder %>% filter(year == 2007)
+head(gap_2007)
+```
+
+- Use `==` to compare a variable to a value
+
+---
+
+## Logical operators
+
+- Use `|` to check for any in multiple filters being true:
+--
+
+```{r eval=FALSE}
+gapminder %>% 
+  filter(year == 2002 | continent == "Europe")
+```
+--
+
+```{r echo=FALSE}
+gapminder %>% 
+  filter(year == 2002 | continent == "Europe")
+```
+
+---
+
+## Logical operators
+
+- Use `&` or `,` to check for all of multiple filters being true:
+--
+
+```{r eval=FALSE}
+gapminder %>% 
+  filter(year == 2002, continent == "Europe")
+```
+
+```{r echo=FALSE}
+gapminder %>% 
+  filter(year == 2002, continent == "Europe")
+```
+
+---
+
+## Logical operators
+
+- Use `%in%` to check for any being true <br> (shortcut to using `|` repeatedly with `==`)
+--
+
+```{r eval=FALSE}
+gapminder %>% 
+  filter(country %in% c("Argentina", "Belgium", "Mexico"),
+         year %in% c(1987, 1992))
+```
+--
+
+```{r echo=FALSE}
+gapminder %>% 
+  filter(country %in% c("Argentina", "Belgium", "Mexico"),
+         year %in% c(1987, 1992))
+```
+
+
+---
+
+## `summarize()`
+
+- Any numerical summary that you want to apply to a column of a data frame is specified within `summarize()`.
+
+```{r eval=FALSE}
+max_exp_1997 <- gapminder %>% 
+  filter(year == 1997) %>% 
+  summarize(max_exp = max(lifeExp))
+max_exp_1997
+```
+--
+
+```{r echo=FALSE}
+max_exp_1997 <- gapminder %>% 
+  filter(year == 1997) %>% 
+  summarize(max_exp = max(lifeExp))
+max_exp_1997
+```
+
+
+
+---
+
+### Combining `summarize()` with `group_by()`
+
+When you'd like to determine a numerical summary for all
+levels of a different categorical variable
+
+```{r eval=FALSE}
+max_exp_1997_by_cont <- gapminder %>% 
+  filter(year == 1997) %>% 
+  group_by(continent) %>%
+  summarize(max_exp = max(lifeExp))
+max_exp_1997_by_cont
+```
+
+--
+```{r echo=FALSE}
+max_exp_1997_by_cont <- gapminder %>% 
+  filter(year == 1997) %>% 
+  group_by(continent) %>%
+  summarize(max_exp = max(lifeExp))
+max_exp_1997_by_cont
+```
+
+---
+
+## `ggplot2` revisited
+
+For aggregated data, use `geom_col`
+
+```{r fig.height=4.5}
+ggplot(data = max_exp_1997_by_cont, 
+       mapping = aes(x = continent, y = max_exp)) +
+  geom_col()
+```
+---
+
+
+## The 5MV
+
+- `filter()`
+- `summarize()`
+- `group_by()`
+--
+
+- `mutate()`
+
+--
+- `arrange()`
+
+---
+
+## `mutate()`
+
+- Allows you to 
+    1. <font color="blue">create a new variable with a specific value</font> OR
+    2. create a new variable based on other variables OR
+    3. change the contents of an existing variable
+
+--
+
+```{r}
+gap_plus <- gapminder %>% mutate(just_one = 1)
+head(gap_plus)
+```
+
+---
+
+## `mutate()`
+
+- Allows you to 
+    1. create a new variable with a specific value OR
+    2. <font color="blue">create a new variable based on other variables</font> OR
+    3. change the contents of an existing variable
+
+--
+
+```{r}
+gap_w_gdp <- gapminder %>% mutate(gdp = pop * gdpPercap)
+head(gap_w_gdp)
+```
+
+---
+
+## `mutate()`
+
+- Allows you to 
+    1. create a new variable with a specific value OR
+    2. create a new variable based on other variables OR
+    3. <font color="blue">change the contents of an existing variable</font>
+
+--
+
+```{r}
+gap_weird <- gapminder %>% mutate(pop = pop + 1000)
+head(gap_weird)
+```
+
+---
+
+## `arrange()`
+
+- Reorders the rows in a data frame based on the values of one or more variables
+--
+
+```{r}
+gapminder %>%
+  arrange(year, country)
+```
+
+---
+
+## `arrange()`
+
+- Can also put into descending order
+--
+
+```{r desc, results="hide"}
+gapminder %>%
+  filter(year > 2000) %>%
+  arrange(desc(lifeExp))
+```
+
+---
+
+## Don't mix up `arrange` and `group_by`
+
+- `group_by` is used (mostly) with `summarize` to calculate summaries over groups
+
+- `arrange` is used for sorting
+
+---
+
+## Don't mix up `arrange` and `group_by`
+
+This doesn't really do anything useful
+
+```{r rows.print=10}
+gapminder %>% group_by(year)
+```
+
+---
+
+## Don't mix up `arrange` and `group_by`
+
+But this does
+
+```{r rows.print=10}
+gapminder %>% arrange(year)
+```
+
+---
+
+## Changing of observation unit
+
+True or False
+> Each of `filter`, `mutate`, and `arrange` change the observational unit.
+
+--
+
+True or False
+> `group_by() %>% summarize()` changes the observational unit.
+
+<!-- 
+Draw diagram for average monthly temp aggregated like on rstudio::conf slides
+-->
+
+---
+
+## What is meant by "joining data frames" and <br> why is it useful?
+
+--
+
+```{r echo=FALSE, fig.align='center'}
+knitr::include_graphics("https://ismayc.github.io/moderndiver-book/images/join-inner.png")
+```
+
+---
+
+### Does cost of living in a state relate to whether police officers live in the cities they patrol?  What about state political ideology?
+
+- <small><small>Note that you may need to refresh the page for the data to appear</small></small>
+
+```{r rows.print=7}
+library(fivethirtyeight); library(readr); library(rmarkdown)
+ideology <- read_csv("https://ismayc.github.io/Effective-Data-Storytelling-using-the-tidyverse/datasets/ideology.csv")
+police_join <- inner_join(x = police_locals, y = ideology, by = "city")
+paged_table(police_join)
+```
+
+---
+
+- <small><small>Note that you may need to refresh the page for the data to appear</small></small>
+
+```{r}
+cost_of_living <- read_csv("https://ismayc.github.io/Effective-Data-Storytelling-using-the-tidyverse/datasets/cost_of_living.csv")
+police_join_cost <- inner_join(x = police_join, y = cost_of_living, by = "state")
+paged_table(police_join_cost)
+```
+
+---
+
+### Does cost of living in a state relate to whether police officers live in the cities they patrol?  What about state political ideology?
+
+```{r fig.width=10}
+ggplot(data = police_join_cost,
+       mapping = aes(x = index, y = all)) +
+  geom_point(aes(color = state_ideology)) +
+  labs(x = "Cost of Living Index", y = "% Officers Living in City")
+```
+
+---
+
+## Practice <small><small>(Lay out what the resulting table should look like on paper first.)</small></small>
+
+Use the 5MV to answer problems from R data packages, e.g., [`nycflights13` $\rightarrow$ `weather`] 
+
+1. What is the maximum arrival delay for each carrier departing JFK? [`nycflights13` $\rightarrow$ `flights`]
+
+2. Determine the top five movies in terms of domestic return on investment for 2013 scaled data<br> [`fivethirtyeight` $\rightarrow$ `bechdel`]
+
+3. [Include the name of the destination airport as a column in the `flights` data frame](http://r4ds.had.co.nz/diagrams/relational-nycflights.png) <br> [`nycflights13` $\rightarrow$ `flights`, `airports`]
+
+---
+
+## Homework for tomorrow
+
+- Use the `readr`, `readxl`, and `haven` packages to read in data from CSVs, Excel XLS files, STATA/SPSS files
+
+- Use `ggplot2` and `dplyr` to make graphics and produce data wrangling on data sets of interest to you
+
+<br>
+
+Before you go
+
+- Tell me on the sheet of paper you have what types of models you usually run (i.e., linear regression, logistic regression, mixed models, etc.)
