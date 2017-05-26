@@ -1119,6 +1119,8 @@ class: inverse, center, middle
 
 ---
 
+class: inverse, center, middle
+
 <!--
 ## Homework for tomorrow
 
@@ -1126,8 +1128,6 @@ class: inverse, center, middle
 
 - Use `ggplot2` and `dplyr` to make graphics and produce data wrangling on data sets of interest to you read in from the previous step
 -->
-
-class: inverse, center, middle
 
 
 # Data Importing and Tidying
