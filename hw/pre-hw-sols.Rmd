@@ -1,0 +1,155 @@
+---
+title: "Pre-Bootcamp HW Answers"
+author: "Chester Ismay"
+date: "5/26/2017"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_folding: hide
+    code_download: true
+---
+
+```{r doc-defaults, include=FALSE}
+knitr::opts_chunk$set(comment=NA)
+```
+
+
+## Problem Description
+
+The `nyc-weather-13.csv` file available from [http://bit.ly/nyc-weather-13](https://ismayc.github.io/poRtland-bootcamp17/nyc-weather-13.csv) contains hourly meteorological data from 2013 for each of the three New York City airports:
+
+  - `EWR` - Newark Liberty International Airport
+  - `JFK` - John F. Kennedy International Airport
+  - `LGA` - LaGuardia Airport
+
+***
+
+### Get the data
+
+We will use the `read_csv` function in the `readr` package available in the meta-package called `tidyverse` to read in this data from the web.  We give this data frame the name `weather`.
+
+```{r load, message=FALSE}
+#install.packages("tidyverse")
+#install.packages("knitr")
+#install.packages("rmarkdown")
+#install.packages("plotly")
+library(tidyverse)
+library(knitr)
+library(rmarkdown)
+library(plotly)
+weather <- read_csv("http://bit.ly/nyc-weather-13")
+```
+
+
+### Problem 1
+
+Produce a plot exploring the relationship between `month` and `temp`.
+
+**Solution**:  `month` and `temp` are both quantitative variables, so we may start by looking at a scatterplot:
+
+```{r scat1}
+ggplot(data = weather, 
+  mapping = aes(x = month, y = temp)) +
+  geom_point()
+```
+
+This gives us a rough layout of the data.  To better understand the variability, a (side-by-side) boxplot is preferred.  
+
+```{r}
+ggplot(data = weather, 
+  mapping = aes(x = month, y = temp)) +
+  geom_boxplot()
+```
+
+This isn't the plot that we want and the first warning message provides some guidance as to how to proceed with a continuous `x` aesthetic.  We also see that one value is missing from the data with the other warning.
+
+```{r}
+ggplot(data = weather, 
+  mapping = aes(x = month, group = month, y = temp)) +
+  geom_boxplot()
+```
+
+This isn't quite the plot we want either since the `x` axis is on a continuous scale but `month` is discrete.  We also can use the `warning=FALSE` chunk option to omit the warning about missing values.
+
+```{r warning=FALSE}
+plot1 <- ggplot(data = weather, 
+  mapping = aes(x = month, group = month, y = temp)) +
+  geom_boxplot() +
+  scale_x_continuous(breaks = 1:12)
+plot1
+```
+
+
+## Problem 2
+
+Calculate the minimum temperature recorded for each month across all three airports.
+
+```{r}
+min_month_temp <- weather %>%
+  group_by(month) %>%
+  summarize(min_temp = min(temp))
+min_month_temp
+```
+
+If we don't like the "raw" output that is produced by default with a table, we can pass the data frame into the `kable` function in the `knitr` package or the `paged_table` function in the `rmarkdown` package to get nicer output:
+
+```{r}
+kable(min_month_temp)
+```
+
+
+This shows that the minimum temperature for August is missing.  This is due to the fact that there is a missing temperature in the data.  If you look into `?min`, you can see that one of the arguments to the function is `na.rm` which is set to `FALSE` by default.  We will set it to `TRUE` now:
+
+```{r}
+min_month_temp <- weather %>%
+  group_by(month) %>%
+  summarize(min_temp = min(temp, na.rm = TRUE))
+paged_table(min_month_temp)
+```
+
+
+## Problem 3
+
+Produce a plot showing how minimum temperature varies across the 12 months.
+
+```{r}
+ggplot(data = min_month_temp,
+  mapping = aes(x = month, y = min_temp)) +
+  geom_point()
+```
+
+## Problem 4
+
+Calculate the minimum temperature recorded for each month FOR EACH OF the three airports.
+
+```{r}
+min_month_temp2 <- weather %>%
+  group_by(month, origin) %>%
+  summarize(min_temp = min(temp, na.rm = TRUE))
+paged_table(min_month_temp2)
+```
+
+## Problem 5
+
+Explore the multivariate relationship between month, airport, and minimum temperature via a statistical graphic.
+
+```{r}
+plot5 <- ggplot(data = min_month_temp2,
+  mapping = aes(x = month, y = min_temp, color = origin)) +
+  geom_line() +
+  geom_point()
+```
+
+## Showing off
+
+We can easily turn any of the plots above into interactive graphics using the `plotly` package and its `ggplotly` function.  Hover over the plots!
+
+```{r warning=FALSE, fig.height=5}
+ggplotly(plot1)
+ggplotly(plot5, tooltip = c("x", "y", "color"))
+```
+
+
+**Discussion**:  In general, we see that the winter and fall months have the most variability with the summer having the least.  This makes sense about New York City having both some very cold winter days and some hot summer days with a range of values throughout. `r ifelse(min_month_temp$min_temp[5] < 40, paste0("As noted in the boxplot in Problem 1, there is a strange outlier in May showing a minimum temperature of ", min_month_temp$min_temp[5], "."), "")`  

@@ -13,6 +13,20 @@ output:
     css: example.css
 ---
 
+name: toc
+
+# Table of Contents
+
+- [Data Viz](#viz)
+- [Data Wrangling](#wrangle)
+- [Data Importing](#import)
+- [Data Tidying](#tidy)
+- [Data Modeling](#model)
+- [Data Communicating](#rmarkdown)
+
+
+---
+
 class: inverse, center, middle
 
 <!-- Write slide link on whiteboard -->
@@ -262,6 +276,8 @@ This will help with
 ---
 
 class: inverse, center, middle
+name: viz
+
 
 # Data Visualization
 
@@ -661,8 +677,6 @@ grid.arrange(p1, p2, p3, p4, ncol = 2, padding = unit(0.5, "line"),
 
 ```
 
-
-
 ---
 
 class: inverse, center, middle
@@ -680,6 +694,7 @@ class: center, middle
 ---
 
 class: inverse, center, middle
+name: wrangle
 
 # Day 2
 
@@ -699,6 +714,7 @@ gapminder
 ## Base R versus the `tidyverse`
 
 Say we wanted mean life expectancy across all years for Asia
+
 --
 
 ```{r}
@@ -861,6 +877,26 @@ max_exp_1997_by_cont
 
 ---
 
+### Without the `%>%`
+
+It's hard to appreciate the `%>%` without seeing what the code would look like without it:
+
+```{r}
+max_exp_1997_by_cont <- 
+  summarize(
+    group_by(
+      filter(
+        gapminder, 
+          year == 1997), 
+      continent),
+    max_exp = max(lifeExp))
+max_exp_1997_by_cont
+```
+
+
+
+---
+
 ## `ggplot2` revisited
 
 For aggregated data, use `geom_col`
@@ -952,7 +988,7 @@ gapminder %>%
 - Can also put into descending order
 --
 
-```{r desc, results="hide"}
+```{r desc}
 gapminder %>%
   filter(year > 2000) %>%
   arrange(desc(lifeExp))
@@ -1017,13 +1053,24 @@ knitr::include_graphics("https://ismayc.github.io/moderndiver-book/images/join-i
 ### Does cost of living in a state relate to whether police officers live in the cities they patrol?  What about state political ideology?
 
 
-```{r rows.print=7}
-library(fivethirtyeight); library(readr)
+```{r eval=FALSE}
+library(fivethirtyeight); library(readr); library(dplyr)
 police2 <- police_locals %>% select(city, all)
 ideology <- read_csv("https://ismayc.github.io/Effective-Data-Storytelling-using-the-tidyverse/datasets/ideology.csv")
 police_join <- inner_join(x = police2, y = ideology, by = "city")
 police_join
 ```
+
+--
+
+```{r echo=FALSE}
+library(fivethirtyeight); library(readr); library(dplyr)
+police2 <- police_locals %>% select(city, all)
+ideology <- read_csv("https://ismayc.github.io/Effective-Data-Storytelling-using-the-tidyverse/datasets/ideology.csv")
+police_join <- inner_join(x = police2, y = ideology, by = "city")
+police_join
+```
+
 
 ---
 
@@ -1072,14 +1119,694 @@ class: inverse, center, middle
 
 ---
 
+<!--
 ## Homework for tomorrow
 
 - Review the Data Import cheatsheet and use the `readr`, `readxl`, and `haven` packages to read in data from CSVs, Excel XLS/XLSX files, STATA/SPSS files
 
 - Use `ggplot2` and `dplyr` to make graphics and produce data wrangling on data sets of interest to you read in from the previous step
+-->
+
+class: inverse, center, middle
+
+
+# Data Importing and Tidying
+
+---
+
+# `tidyverse` packages
+
+**IMPORT**
+
+- `haven` for SPSS, SAS, and Stata data files
+- `jsonlite` for JSON files
+- `readxl` for XLS and XLSX files
+- `readr` for CSV and TSV files (and R specific RDS files)
 
 <br>
 
-Before you go
+**TIDYING**
 
-- Tell me on the sheet of paper you have what types of models you usually run (i.e., linear regression, logistic regression, mixed models, etc.)
+- `tidyr` for converting "messy" into "tidy" data frames
+
+---
+
+name: import
+
+## Basics of Importing
+
+<small>We will begin by downloading and importing a variety of different "messy" data sets.  You can download all of them in a ZIP file at <http://bit.ly/reed-messy-data>.  The links below go to the original sources.  I've converted these original sources into different formats.</small>
+
+
+- [Life Expectancy by year for countries since 1951 (CSV)](https://spreadsheets.google.com/pub?key=phAwcNAVuyj2tPLxKvvnNPA&output=xls)
+
+- [World Health Organization TB data (Stata DTA)](http://www.who.int/tb/country/data/download/en/)
+
+- [Annual Estimates of Population by Age, Sex, Race, and Hispanic Origin for Oregon Counties (XLSX)](https://www.census.gov/popest/data/counties/asrh/2011/CC-EST2011-alldata.html)
+- [Educational attainment for the U.S., States, and counties, 1970-2014 (JSON)](http://www.ers.usda.gov/data-products/county-level-data-sets/download-data.aspx)
+- [County level results for 2012 POTUS election from The Guardian (SPSS SAV)](https://fusiontables.google.com/DataSource?docid=1qcQLqrAIAe3RcEfdWSm_QcXMLmteVg4uSpSs1rM)
+
+
+---
+
+class: center, middle, inverse
+
+## Demonstration in RStudio
+
+---
+
+## Practice
+
+- Download the four other files and import them into R using the appropriate package
+    - You may need to check out the help pages for the different packages
+        - [`haven` for SPSS, SAS, and Stata data files](http://haven.tidyverse.org/)
+        - [`jsonlite` for JSON files](https://cran.r-project.org/web/packages/jsonlite/vignettes/json-aaquickstart.html)
+        - [`readxl` for XLS and XLSX files](https://github.com/hadley/readxl)
+        - [`readr` for CSV/TSV files (& R specific RDS files)](http://readr.tidyverse.org/)
+    - Give them the following names: `who_df`, `county_pop_df`, `edu_county_df`, and `potus12_df`
+  
+---
+
+name: tidy
+class: inverse, middle, center
+
+# Tidy Data
+
+
+---
+
+<img src="http://garrettgman.github.io/images/tidy-1.png" style="width: 750px;"/>
+
+1. Each variable forms a column.
+2. Each observation forms a row.
+3. Each type of observational unit forms a table.
+
+The third point means we don't mix apples and oranges.
+
+---
+
+## What is Tidy Data?
+
+1. Each observation forms a row. In other words, each row corresponds to a single instance of an <u>observational unit</u>
+1. Each variable forms a column:
+    + Some variables may be used to identify the <u>observational units</u>. 
+    + For organizational purposes, it's generally better to put these in the left-hand columns
+1. Each type of observational unit forms a table with the entries in the table corresponding to values.
+
+---
+
+## Differentiating between <u>neat</u> data and <u>tidy</u> data
+
+- Colloquially, they mean the same thing
+- But in our context, one is a subset of the other. 
+
+<br>
+
+<u>Neat</u> data is 
+  - easy to look at, 
+  - organized nicely, and 
+  - in table form.
+
+--
+
+<u>Tidy</u> data is neat but also abides by a set of three rules.
+
+---
+
+class: center, middle
+
+<a href="http://stream1.gifsoup.com/view8/20150404/5192859/lebowski-abides-o.gif"><img src="figure/lebowski-abides-o.gif" style="width: 450px;"/></a>
+
+
+<img src="figure/tidy-1.png" alt="Drawing" style="width: 750px;"/>
+
+---
+
+## Is this tidy?
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(fivethirtyeight)
+set.seed(2)
+bechdel %>% sample_n(12) %>%
+  select(year, title, clean_test, budget_2013) %>%
+  arrange(title) %>%
+  kable(format = "html")
+```
+
+
+---
+
+name: demscore
+
+## How about this? Is this tidy?
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+dem_score <- read_csv("data/dem_score.csv")
+knitr::kable(dem_score %>% slice(1:12), format = "html")
+```
+
+---
+
+name: whytidy
+
+## Why is tidy data important?
+
+- Think about trying to plot democracy score across years in the simplest way possible.
+--
+
+- It would be much easier if the data looked like what follows instead so we could put 
+    - `year` on the `x`-axis and 
+    - `dem_score` on the `y`-axis.
+
+---
+
+## Tidy is good
+
+```{r echo=FALSE}
+dem_score_tidy <- dem_score %>% 
+  gather(-country, key = "year", value = "dem_score") %>% 
+  mutate(year = as.numeric(year)) 
+set.seed(2)
+dem_score_tidy %>% sample_n(13) %>% arrange(country) %>% 
+  knitr::kable(format = "html")
+```
+
+---
+
+## Let's plot it
+
+- Plot the line graph for three countries using `ggplot`
+
+```{r}
+dem_score4 <- dem_score_tidy %>%
+  filter(country %in% c("Pakistan", "Portugal", "Uruguay"))
+ggplot(data = dem_score4, mapping = aes(x = year, y = dem_score)) +
+  geom_line(mapping = aes(color = country))
+```
+
+---
+
+## Tidying
+
+### The Life Expectancy by year data
+
+```{r}
+library(readr)
+life_exp_df <- read_csv("data/le_mess.csv")
+#View(life_exp_df)
+```
+
+```{r echo=FALSE}
+knitr::include_graphics("figure/le_mess.png")
+```
+
+---
+
+## Doing the "tidying"/reshaping
+
+```{r message=FALSE}
+library(tidyr)
+library(dplyr)
+(life_exp_tidy <- life_exp_df %>% 
+    gather(key = "year", value = "life_exp", -country))
+```
+
+---
+
+## Tidying
+
+#### World Health Organization TB data (Stata DTA)
+
+
+```{r}
+library(haven)
+who_df <- read_dta("data/who.dta")
+#View(who_df)
+```
+
+```{r echo=FALSE}
+knitr::include_graphics("figure/who_mess.png")
+```
+
+---
+
+## WHO ugly...
+
+- This data set contains strange variable names that will require us to look up their meaning in the corresponding [**data dictionary**](https://extranet.who.int/tme/generateCSV.asp?ds=dictionary).
+
+--
+
+- What do we know?
+     - `country`, `iso2`, and `iso3` are redundant and identify the country
+     - `year` is a variable and it looks like it corresponds to each country
+- But what in the world is `new_sp_m014`? And the other columns?...
+
+---
+
+## First step
+
+Like before, we can `gather` these non-`country` and non-`year` variables together:
+
+```{r}
+who_tidy <- who_df %>% 
+  gather(new_sp_m014:newrel_f65, key = "key", value = "value")
+```
+
+We can now see what this has done to the data frame:
+
+```{r eval=FALSE}
+View(who_tidy)
+```
+
+---
+
+## Data dictionary saves us some...
+
+1. The first three letters of entries in the `key` column correspond to `new` or `old` cases of TB.
+2. The next two letters (after the `_`) correspond to TB type:
+    - `rel` for relapse, `ep` for extrapulmonary TB
+    - `sn` for smear negative, `sp` for smear positive
+3. The next letter after the second `_` corresponds to the sex of the TB patient.
+4. The remaining numbers correspond to age group:
+    - `014` for 0 to 14 years
+    - ...
+    - `65` for 65 or older
+
+---
+
+- Looking over the entries of `key` in `who_tidy`, do you see anything else that doesn't match the pattern?
+
+- It may be easier to remember that the entries of `key` correspond to column names in `who_df`:
+
+```{r}
+names(who_df)
+```
+
+---
+
+## A fix using `stringr`
+
+You can replace all of the entries in `key` that contained `newrel` with `new_rel` via
+
+```{r}
+library(stringr)
+library(dplyr)
+who_tidy <- who_tidy %>% 
+  mutate(key = str_replace(
+      string = key, 
+      pattern = "newrel", 
+      replacement = "new_rel")
+    )
+```
+
+---
+
+## Pulling apart variables
+
+The entry `new_sp_m014` is actually four different variables.  Use the `separate` function to pull them apart:
+
+```{r}
+who_tidy <- who_tidy %>% 
+  separate(col = key, into = c("new", "type", "sexage"), sep = "_")
+who_tidy
+```
+
+---
+
+## One more pull apart
+
+- We need to pull `sexage` into two different variables.  
+- If you use `?separate`, you'll see that the following is an option:
+
+```{r}
+(who_tidy <- who_tidy %>% 
+  separate(col = sexage, into = c("sex", "age"), sep = 1))
+```
+
+---
+
+## Final cleaning
+
+- `iso2` and `iso3` are redundant if we have `country`
+- `new` is constant since this only has new cases of TB
+- Let's just ignore missing values here
+- We also know that `value` is actually `cases` so we can `rename` that column.
+
+```{r, tidy=FALSE}
+who_tidy <- who_tidy %>% select(-iso2, -iso3, -new) %>% 
+  na.omit() %>% rename("cases" = value)
+head(who_tidy, 5)
+```
+
+---
+
+## The power of the `%>%` (pipe)
+
+Everything we did above can be chained into one sequence:
+
+
+```{r eval=FALSE}
+who_tidy <- who_df %>% 
+  gather(new_sp_m014:newrel_f65, key = "key", value = "value") %>%  
+  mutate(key = str_replace(key, pattern = "newrel", 
+                           replacement = "new_rel")) %>% 
+  separate(col = key, into = c("new", "type", "sexage"), sep = "_") %>% 
+  separate(col = sexage, into = c("sex", "age"), sep = 1) %>% 
+  select(-iso2, -iso3, -new) %>% 
+  na.omit() %>% 
+  rename("cases" = value)
+```
+
+---
+
+## BONUS
+
+### A Gapminder tidy dataset read in from a Google Sheet!
+
+- I've updated the `gapminder` data set available in the `gapminder` R data package by Jenny Bryan [here](https://github.com/jennybc/gapminder/).  Jenny provides [instructions](https://github.com/jennybc/gapminder/tree/master/data-raw) for recreating the data.
+
+---
+
+## BONUS
+
+- You can download the updated data from Google Sheets by running the following in R:
+
+```{r eval=FALSE}
+# Link is https://docs.google.com/spreadsheets/d/18L5ZiXd1CQ97XWSqb04x1YQ4ncsEOdR7eHzgX0ZIuPA/edit?usp=sharing
+library(googlesheets)
+updated_gap <- gs_key("18L5ZiXd1CQ97XWSqb04x1YQ4ncsEOdR7eHzgX0ZIuPA") %>%
+  gs_read()
+```
+
+
+- A script going through the steps to take the "messy" original Gapminder.org files and turn them into this tidy dataset is available [here](https://raw.githubusercontent.com/ismayc/tidyverse_workshops/master/importing_tidying/data/cleaning.R).
+
+---
+
+## Practice (after the bootcamp)
+
+Try to tidy the other data sets you downloaded and imported or other data sets you have!
+
+---
+
+name: model
+class: inverse, center, middle
+
+# Data Modeling
+
+
+---
+
+
+# Modeling
+
+1. Experience with `ggplot2` package and knowledge of the Grammar of Graphics primes students for modeling
+1. Use of the `broom` package to unpack regression output into a tidy format
+
+---
+
+## 1. `ggplot2` Primes Regression
+
+Example:
+
+* All Alaskan Airlines and Frontier flights leaving NYC in 2013
+* We want to study the relationship between temperature and departure delay
+* For summer (June, July, August) and non-summer months separately
+
+Involves four variables: 
+
+- `carrier`, `temp`, `dep_delay`, `summer`
+
+---
+
+## 1. `ggplot2` Primes Regression
+
+```{r}
+flights_subset <- flights %>% 
+  filter(carrier == "AS" | carrier == "F9") %>% 
+  left_join(weather, by=c("year", "month", "day", "hour", "origin")) %>% 
+  filter(dep_delay < 250) %>% 
+  mutate(summer = ifelse(month == 6 | month == 7 | month == 8, "Summer Flights", "Non-Summer Flights"))
+```
+
+---
+
+```{r, fig.height=6, fig.width=10.5}
+ggplot(data = flights_subset, 
+    mapping = aes(x = temp, y = dep_delay, color = carrier)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ summer)
+```
+
+---
+
+## 1. `ggplot2` Primes Regression
+
+Why? Dig deeper into data. Look at `origin` and `dest` variables as well:
+
+<br> 
+
+```{r}
+flights_subset %>% 
+  group_by(carrier, origin, dest) %>% 
+  summarise(`Number of Flights` = n())
+```
+
+---
+
+
+## 2. `broom` Package
+
+* The `broom` package takes the messy output of built-in modeling functions in R, such as
+`lm`, `nls`, or `t.test`, and turns them into tidy data frames.
+* Fits in with `tidyverse` ecosystem
+* This works for [many R data types](https://github.com/tidyverse/broom#available-tidiers)!
+
+---
+
+## 2. `broom` Package
+
+In our case, `broom` functions take `lm` objects as inputs and return the following in tidy format!
+
+* `tidy()`: regression output table
+* `augment()`: point-by-point values (fitted values, residuals, predicted values)
+* `glance()`: scalar summaries like <large> $R^2$ </large>, 
+
+---
+
+## 2. `broom` Package
+
+Example
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+library(knitr)
+library(broom)
+set.seed(2017)
+
+# Load Alaska data, deleting rows that have missing departure delay
+# or arrival delay data
+alaska_flights <- flights %>% 
+  filter(carrier == "AS") %>% 
+  filter(!is.na(dep_delay) & !is.na(arr_delay)) %>% 
+  sample_n(50)
+```
+
+---
+
+```{r}
+# Exploratory Data Analysis-----------------------------------------
+# Plot of sample of points:
+ggplot(data = alaska_flights, mapping = aes(x = dep_delay, y = arr_delay)) + 
+   geom_point()
+```
+
+---
+
+```{r}
+# Correlation coefficient:
+alaska_flights %>% summarize(correl = cor(dep_delay, arr_delay))
+
+# Add regression line
+ggplot(data = alaska_flights, mapping = aes(x = dep_delay, y = arr_delay)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red")
+```
+
+---
+
+```{r}
+# Fit Regression and Study Output with broom Package-------------------
+# Fit regression
+options(scipen = 6) # Set scientific notation
+delay_fit <- lm(formula = arr_delay ~ dep_delay, data = alaska_flights)
+
+# 1. broom::tidy() regression table with confidence intervals 
+# and no p-value stars
+regression_table <- delay_fit %>% 
+  tidy(conf.int = TRUE)
+regression_table
+```
+
+---
+
+```{r}
+# 2. broom::augment() for point-by-point values
+regression_points <- delay_fit %>% 
+  augment() %>% 
+  select(arr_delay, dep_delay, .fitted, .resid) 
+regression_points
+```
+
+---
+
+```{r}
+# and for prediction
+new_flights <- data_frame(dep_delay = c(25, 30, 15))
+delay_fit %>% 
+  augment(newdata = new_flights)
+```
+
+---
+
+```{r}
+# 3. broom::glance() scalar summaries of regression
+regression_summaries <- delay_fit %>% 
+  glance() 
+regression_summaries
+```
+
+---
+
+```{r}
+# Residual Analysis------------------------------------------------------
+ggplot(data = regression_points, mapping = aes(x = .resid)) +
+  geom_histogram(binwidth=10, color = "white") +
+  geom_vline(xintercept = 0, color = "blue")
+```
+
+---
+
+```{r}
+ggplot(data = regression_points, mapping = aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 0, color = "blue")
+```
+
+---
+
+```{r}
+ggplot(data = regression_points, mapping = aes(sample = .resid)) +
+  stat_qq()
+```
+
+---
+
+class: center, middle, inverse
+name: rmarkdown
+
+# Data Communicating
+
+
+---
+
+## What is Markdown?
+
+ - A "plaintext formatting syntax"
+ - Type in plain text, render to more complex formats
+ - One step beyond writing a `txt` file
+ - Render to HTML, PDF, DOCX, etc. using Pandoc
+
+---
+
+## What does it look like?
+
+.left-column[
+```
+  # Header 1
+  
+  ## Header 2
+  
+  Normal paragraphs of text go here.
+  
+  **I'm bold**
+  
+  [links!](http://rstudio.com)
+  
+   * Unordered
+   * Lists   
+   
+  And  Tables
+  ---- -------
+  Like This
+  
+```
+]
+
+.right-column[
+<img src="figure/markdown.png" alt="markdown" style="width: 270px;"/>
+]
+
+---
+
+## What is R Markdown?
+  
+- "Literate programming"
+- Embed R code in a Markdown document
+- Renders textual output along with graphics
+
+***
+
+.left-column[
+```
+
+```{r chunk1}
+library(ggplot2)
+library(nycflights13)
+pdx_flights <- flights %>% 
+  filter(dest == "PDX", month == 5)
+nrow(pdx_flights)
+```
+
+```{r chunk2}
+ggplot(data = pdx_flights,
+  mapping = aes(x = arr_delay, 
+                y = dep_delay)) +
+  geom_point()
+```
+
+```
+]
+
+.right-column[
+```{r, fig.width=4.5, fig.height=4, echo=FALSE}
+library(ggplot2)
+library(nycflights13)
+pdx_flights <- flights %>% 
+  filter(dest == "PDX", month == 5)
+nrow(pdx_flights)
+ggplot(data = pdx_flights,
+  mapping = aes(x = arr_delay, 
+                y = dep_delay)) +
+  geom_point()
+```
+]
+
+---
+
+# Practice
+
+Turn a statistical analysis you have conducted into an R Markdown document.
+
+- You can also publish online easily to <http://rpubs.com>
+
+---
+
+class: middle
+
+# Thanks for attending!
+
+- Slides created via the R package [xaringan](https://github.com/yihui/xaringan) by Yihui Xie
+- Source code for these slides and the webpage at <https://github.com/ismayc/poRtland-bootcamp17>

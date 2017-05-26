@@ -25,13 +25,9 @@ title: "Agenda"
     - Design a new variable using `mutate()`
     - Sort the data based on one or more variables with `arrange()`
 - Importing data using `readr`, `readxl`, and `haven` packages
-- What is tidy data
+- What is tidy data?
 - Using the `tidyr` package to reshape/tidy/make data long
-- Modeling with 
-    - `lm` and `glm` functions
-    - `lmer` function in `lme4` package
-    - various functions in the `caret` package
-    - Other requests?
+- Modeling with `lm` function and `broom` for tidying model output
 - Communicating with `rmarkdown`
 
 ### Potential other topics to cover

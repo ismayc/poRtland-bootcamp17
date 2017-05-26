@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Homework</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Reed SpRing Bootcamp</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="hw.html">Homework</a>
+</li>
+<li>
+  <a href="slides.html">Slides</a>
+</li>
+<li>
+  <a href="agenda.html">Agenda</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Homework</h1>
+
+</div>
+
+
+<hr />
+<div id="pre-bootcamp-hw" class="section level2">
+<h2>Pre-Bootcamp HW</h2>
+<p>Use the computational tools/statistical analysis workflow you are familiar with to perform the following tasks. By “statistical analysis workflow” I mean something like the following (there are plenty of other ways as well):</p>
+<ul>
+<li>Using SPSS drop-down menus to do the needed calculations and plots and then copying these results into Microsoft Word where you write your analysis.</li>
+<li>Writing a STATA do file to perform the analysis and then copying the results into Google Docs with analysis to create a report.</li>
+</ul>
+<p><strong>Problem Description</strong>: The <code>nyc-weather-13.csv</code> file available from <a href="https://ismayc.github.io/poRtland-bootcamp17/nyc-weather-13.csv">http://bit.ly/nyc-weather-13</a> contains hourly meteorological data from 2013 for each of the three New York City airports:</p>
+<ul>
+<li><code>EWR</code> - Newark Liberty International Airport</li>
+<li><code>JFK</code> - John F. Kennedy International Airport</li>
+<li><code>LGA</code> - LaGuardia Airport</li>
+</ul>
+<p><strong>Tasks to complete</strong>:</p>
+<ol style="list-style-type: decimal">
+<li>Produce a plot exploring the relationship between <code>month</code> and <code>temp</code>.</li>
+<li>Calculate the minimum temperature recorded for each month across all three airports.
+<ul>
+<li>This should result in a dataset with 12 rows and two columns. (One row for each month.)</li>
+</ul></li>
+<li>Produce a plot showing how minimum temperature varies across the 12 months.</li>
+<li>Calculate the minimum temperature recorded for each month FOR EACH OF the three airports.
+<ul>
+<li>This should result in a dataset with 36 rows and three columns. (One row for each month for each airport.)</li>
+</ul></li>
+<li>Explore the multivariate relationship between month, airport, and minimum temperature via a statistical graphic.</li>
+</ol>
+<p><strong>Last but not least</strong>: Produce a report providing the calculations done in table form as well as the graphics made. Also include a brief discussion about what stands out from the plots and calculations.</p>
+</div>
+<div id="pre-bootcamp-hw-r-solutions" class="section level2">
+<h2>Pre-Bootcamp HW R Solutions</h2>
+<ul>
+<li><a href="hw/pre-hw-sols.html" target="_blank">With the outlier</a></li>
+<li><a href="hw/pre-hw-sols2.html" target="_blank">With the outlier removed</a></li>
+</ul>
+<hr />
+</div>
+<div id="day-1-hw" class="section level2">
+<h2>Day 1 HW</h2>
+<p>Produce appropriate 5NG (Five Named Graphs) with R package &amp; data set in [ ], e.g., [<code>nycflights13</code> <span class="math inline">\(\rightarrow\)</span> <code>weather</code>]. Try to look through the help documentation/Google to improve/customize your plots.</p>
+<ol style="list-style-type: decimal">
+<li><p>Does <code>age</code> predict <code>recline_rude</code>? <br> [<code>fivethirtyeight</code> <span class="math inline">\(\rightarrow\)</span> <code>na.omit(flying)</code>]</p></li>
+<li><p>Distribution of <code>age</code> by <code>sex</code> <br> [<code>okcupiddata</code> <span class="math inline">\(\rightarrow\)</span> <code>profiles</code>]</p></li>
+<li><p>Does <code>budget</code> predict <code>rating</code>? <br> [<code>ggplot2movies</code> <span class="math inline">\(\rightarrow\)</span> <code>movies</code>]</p></li>
+<li><p>Distribution of log base 10 scale of <code>budget_2013</code> <br> [<code>fivethirtyeight</code> <span class="math inline">\(\rightarrow\)</span> <code>bechdel</code>]</p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

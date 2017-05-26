@@ -16,3 +16,9 @@ This website will contain materials and links to resources discussed at the Reed
 - [Getting Used to R, RStudio, and R Markdown](https://ismayc.github.io/rbasics-book/)
 - [R for Data Science - Garrett Grolemund and Hadley Wickham](http://r4ds.had.co.nz/)
 - [List of named colors in R](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf)
+- [The `labelled` R package for working with variable labels](https://cran.r-project.org/web/packages/labelled/vignettes/intro_labelled.html)
+- Importing Data into R
+    - [`rio` R package](https://cran.r-project.org/web/packages/rio/vignettes/rio.html) 
+    - DataCamp Importing Tutorials
+        * [This R Data Import Tutorial Is Everything You Need](https://www.datacamp.com/community/tutorials/r-data-import-tutorial)
+        * [Importing Data Into R - Part Two](https://www.datacamp.com/community/tutorials/importing-data-r-part-two#gs.MNUMSHQ)

@@ -17,6 +17,20 @@ class: center, middle, inverse, title-slide
 ---
 
 
+name: toc
+
+# Table of Contents
+
+- [Data Viz](#viz)
+- [Data Wrangling](#wrangle)
+- [Data Importing](#import)
+- [Data Tidying](#tidy)
+- [Data Modeling](#model)
+- [Data Communicating](#rmarkdown)
+
+
+---
+
 class: inverse, center, middle
 
 &lt;!-- Write slide link on whiteboard --&gt;
@@ -254,6 +268,8 @@ This will help with
 ---
 
 class: inverse, center, middle
+name: viz
+
 
 # Data Visualization
 
@@ -675,8 +691,6 @@ Try to look through the help documentation/Google to improve your plots
 
 ![](slide_deck_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
 
-
-
 ---
 
 class: inverse, center, middle
@@ -694,6 +708,7 @@ class: center, middle
 ---
 
 class: inverse, center, middle
+name: wrangle
 
 # Day 2
 
@@ -731,6 +746,7 @@ gapminder
 ## Base R versus the `tidyverse`
 
 Say we wanted mean life expectancy across all years for Asia
+
 --
 
 
@@ -962,6 +978,38 @@ max_exp_1997_by_cont
 
 ---
 
+### Without the `%&gt;%`
+
+It's hard to appreciate the `%&gt;%` without seeing what the code would look like without it:
+
+
+```r
+max_exp_1997_by_cont &lt;- 
+  summarize(
+    group_by(
+      filter(
+        gapminder, 
+          year == 1997), 
+      continent),
+    max_exp = max(lifeExp))
+max_exp_1997_by_cont
+```
+
+```
+# A tibble: 5 x 2
+  continent max_exp
+     &lt;fctr&gt;   &lt;dbl&gt;
+1    Africa  74.772
+2  Americas  78.610
+3      Asia  80.690
+4    Europe  79.390
+5   Oceania  78.830
+```
+
+
+
+---
+
 ## `ggplot2` revisited
 
 For aggregated data, use `geom_col`
@@ -973,7 +1021,7 @@ ggplot(data = max_exp_1997_by_cont,
   geom_col()
 ```
 
-![](slide_deck_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
 ---
 
 
@@ -1120,6 +1168,23 @@ gapminder %&gt;%
   arrange(desc(lifeExp))
 ```
 
+```
+# A tibble: 284 x 6
+            country continent  year lifeExp       pop gdpPercap
+             &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+ 1            Japan      Asia  2007  82.603 127467972  31656.07
+ 2 Hong Kong, China      Asia  2007  82.208   6980412  39724.98
+ 3            Japan      Asia  2002  82.000 127065841  28604.59
+ 4          Iceland    Europe  2007  81.757    301931  36180.79
+ 5      Switzerland    Europe  2007  81.701   7554661  37506.42
+ 6 Hong Kong, China      Asia  2002  81.495   6762476  30209.02
+ 7        Australia   Oceania  2007  81.235  20434176  34435.37
+ 8            Spain    Europe  2007  80.941  40448191  28821.06
+ 9           Sweden    Europe  2007  80.884   9031088  33859.75
+10           Israel      Asia  2007  80.745   6426679  25523.28
+# ... with 274 more rows
+```
+
 ---
 
 ## Don't mix up `arrange` and `group_by`
@@ -1218,12 +1283,15 @@ Draw diagram for average monthly temp aggregated like on rstudio::conf slides
 
 
 ```r
-library(fivethirtyeight); library(readr)
+library(fivethirtyeight); library(readr); library(dplyr)
 police2 &lt;- police_locals %&gt;% select(city, all)
 ideology &lt;- read_csv("https://ismayc.github.io/Effective-Data-Storytelling-using-the-tidyverse/datasets/ideology.csv")
 police_join &lt;- inner_join(x = police2, y = ideology, by = "city")
 police_join
 ```
+
+--
+
 
 ```
 # A tibble: 75 x 4
@@ -1241,6 +1309,7 @@ police_join
 10      Detroit 0.3705972             Michigan   Conservative
 # ... with 65 more rows
 ```
+
 
 ---
 
@@ -1287,7 +1356,7 @@ ggplot(data = police_join_cost,
   labs(x = "Cost of Living Index", y = "% Officers Living in City")
 ```
 
-![](slide_deck_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
+![](slide_deck_files/figure-html/unnamed-chunk-53-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1310,17 +1379,1246 @@ class: inverse, center, middle
 
 ---
 
+&lt;!--
 ## Homework for tomorrow
 
 - Review the Data Import cheatsheet and use the `readr`, `readxl`, and `haven` packages to read in data from CSVs, Excel XLS/XLSX files, STATA/SPSS files
 
 - Use `ggplot2` and `dplyr` to make graphics and produce data wrangling on data sets of interest to you read in from the previous step
+--&gt;
+
+class: inverse, center, middle
+
+
+# Data Importing and Tidying
+
+---
+
+# `tidyverse` packages
+
+**IMPORT**
+
+- `haven` for SPSS, SAS, and Stata data files
+- `jsonlite` for JSON files
+- `readxl` for XLS and XLSX files
+- `readr` for CSV and TSV files (and R specific RDS files)
 
 &lt;br&gt;
 
-Before you go
+**TIDYING**
 
-- Tell me on the sheet of paper you have what types of models you usually run (i.e., linear regression, logistic regression, mixed models, etc.)
+- `tidyr` for converting "messy" into "tidy" data frames
+
+---
+
+name: import
+
+## Basics of Importing
+
+&lt;small&gt;We will begin by downloading and importing a variety of different "messy" data sets.  You can download all of them in a ZIP file at &lt;http://bit.ly/reed-messy-data&gt;.  The links below go to the original sources.  I've converted these original sources into different formats.&lt;/small&gt;
+
+
+- [Life Expectancy by year for countries since 1951 (CSV)](https://spreadsheets.google.com/pub?key=phAwcNAVuyj2tPLxKvvnNPA&amp;output=xls)
+
+- [World Health Organization TB data (Stata DTA)](http://www.who.int/tb/country/data/download/en/)
+
+- [Annual Estimates of Population by Age, Sex, Race, and Hispanic Origin for Oregon Counties (XLSX)](https://www.census.gov/popest/data/counties/asrh/2011/CC-EST2011-alldata.html)
+- [Educational attainment for the U.S., States, and counties, 1970-2014 (JSON)](http://www.ers.usda.gov/data-products/county-level-data-sets/download-data.aspx)
+- [County level results for 2012 POTUS election from The Guardian (SPSS SAV)](https://fusiontables.google.com/DataSource?docid=1qcQLqrAIAe3RcEfdWSm_QcXMLmteVg4uSpSs1rM)
+
+
+---
+
+class: center, middle, inverse
+
+## Demonstration in RStudio
+
+---
+
+## Practice
+
+- Download the four other files and import them into R using the appropriate package
+    - You may need to check out the help pages for the different packages
+        - [`haven` for SPSS, SAS, and Stata data files](http://haven.tidyverse.org/)
+        - [`jsonlite` for JSON files](https://cran.r-project.org/web/packages/jsonlite/vignettes/json-aaquickstart.html)
+        - [`readxl` for XLS and XLSX files](https://github.com/hadley/readxl)
+        - [`readr` for CSV/TSV files (&amp; R specific RDS files)](http://readr.tidyverse.org/)
+    - Give them the following names: `who_df`, `county_pop_df`, `edu_county_df`, and `potus12_df`
+  
+---
+
+name: tidy
+class: inverse, middle, center
+
+# Tidy Data
+
+
+---
+
+&lt;img src="http://garrettgman.github.io/images/tidy-1.png" style="width: 750px;"/&gt;
+
+1. Each variable forms a column.
+2. Each observation forms a row.
+3. Each type of observational unit forms a table.
+
+The third point means we don't mix apples and oranges.
+
+---
+
+## What is Tidy Data?
+
+1. Each observation forms a row. In other words, each row corresponds to a single instance of an &lt;u&gt;observational unit&lt;/u&gt;
+1. Each variable forms a column:
+    + Some variables may be used to identify the &lt;u&gt;observational units&lt;/u&gt;. 
+    + For organizational purposes, it's generally better to put these in the left-hand columns
+1. Each type of observational unit forms a table with the entries in the table corresponding to values.
+
+---
+
+## Differentiating between &lt;u&gt;neat&lt;/u&gt; data and &lt;u&gt;tidy&lt;/u&gt; data
+
+- Colloquially, they mean the same thing
+- But in our context, one is a subset of the other. 
+
+&lt;br&gt;
+
+&lt;u&gt;Neat&lt;/u&gt; data is 
+  - easy to look at, 
+  - organized nicely, and 
+  - in table form.
+
+--
+
+&lt;u&gt;Tidy&lt;/u&gt; data is neat but also abides by a set of three rules.
+
+---
+
+class: center, middle
+
+&lt;a href="http://stream1.gifsoup.com/view8/20150404/5192859/lebowski-abides-o.gif"&gt;&lt;img src="figure/lebowski-abides-o.gif" style="width: 450px;"/&gt;&lt;/a&gt;
+
+
+&lt;img src="figure/tidy-1.png" alt="Drawing" style="width: 750px;"/&gt;
+
+---
+
+## Is this tidy?
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; clean_test &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; budget_2013 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1995 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Apollo 13 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ok &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 99370665 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2005 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Brokeback Mountain &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; notalk &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16583160 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2010 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Diary of a Wimpy Kid &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ok &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16023478 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1984 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dune &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; dubious &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 100864980 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1984 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Ghostbusters &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; notalk &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 67243320 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2003 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; How to Lose a Guy in 10 Days &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; men &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 63304348 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2011 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Iris &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ok &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5696299 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2004 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Sideways &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ok &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20964279 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Songcatcher &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ok &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2435235 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2004 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Team America: World Police &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; men &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24663858 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2010 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Tron Legacy &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; notalk &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 213646368 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2011 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; War Horse &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; notalk &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 72498355 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+---
+
+name: demscore
+
+## How about this? Is this tidy?
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1952 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1957 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1962 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1967 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1972 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1977 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1982 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1987 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1992 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1997 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 2002 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 2007 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Albania &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Armenia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Australia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Austria &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Azerbaijan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Belarus &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Belgium &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bhutan &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bulgaria &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+name: whytidy
+
+## Why is tidy data important?
+
+- Think about trying to plot democracy score across years in the simplest way possible.
+--
+
+- It would be much easier if the data looked like what follows instead so we could put 
+    - `year` on the `x`-axis and 
+    - `dem_score` on the `y`-axis.
+
+---
+
+## Tidy is good
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; dem_score &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1962 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Armenia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Denmark &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1962 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Ethiopia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Finland &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Ireland &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1992 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Libya &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Libya &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1982 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mexico &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1977 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mexico &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1982 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Spain &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1962 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Switzerland &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1982 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Ukraine &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Let's plot it
+
+- Plot the line graph for three countries using `ggplot`
+
+
+```r
+dem_score4 &lt;- dem_score_tidy %&gt;%
+  filter(country %in% c("Pakistan", "Portugal", "Uruguay"))
+ggplot(data = dem_score4, mapping = aes(x = year, y = dem_score)) +
+  geom_line(mapping = aes(color = country))
+```
+
+![](slide_deck_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
+
+---
+
+## Tidying
+
+### The Life Expectancy by year data
+
+
+```r
+library(readr)
+life_exp_df &lt;- read_csv("data/le_mess.csv")
+#View(life_exp_df)
+```
+
+![](figure/le_mess.png)&lt;!-- --&gt;
+
+---
+
+## Doing the "tidying"/reshaping
+
+
+```r
+library(tidyr)
+library(dplyr)
+(life_exp_tidy &lt;- life_exp_df %&gt;% 
+    gather(key = "year", value = "life_exp", -country))
+```
+
+```
+# A tibble: 13,332 x 3
+               country  year life_exp
+                 &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+ 1         Afghanistan  1951    27.13
+ 2             Albania  1951    54.72
+ 3             Algeria  1951    43.03
+ 4              Angola  1951    31.05
+ 5 Antigua and Barbuda  1951    58.26
+ 6           Argentina  1951    61.93
+ 7             Armenia  1951    62.67
+ 8               Aruba  1951    58.96
+ 9           Australia  1951    68.71
+10             Austria  1951    65.24
+# ... with 13,322 more rows
+```
+
+---
+
+## Tidying
+
+#### World Health Organization TB data (Stata DTA)
+
+
+
+```r
+library(haven)
+who_df &lt;- read_dta("data/who.dta")
+#View(who_df)
+```
+
+![](figure/who_mess.png)&lt;!-- --&gt;
+
+---
+
+## WHO ugly...
+
+- This data set contains strange variable names that will require us to look up their meaning in the corresponding [**data dictionary**](https://extranet.who.int/tme/generateCSV.asp?ds=dictionary).
+
+--
+
+- What do we know?
+     - `country`, `iso2`, and `iso3` are redundant and identify the country
+     - `year` is a variable and it looks like it corresponds to each country
+- But what in the world is `new_sp_m014`? And the other columns?...
+
+---
+
+## First step
+
+Like before, we can `gather` these non-`country` and non-`year` variables together:
+
+
+```r
+who_tidy &lt;- who_df %&gt;% 
+  gather(new_sp_m014:newrel_f65, key = "key", value = "value")
+```
+
+We can now see what this has done to the data frame:
+
+
+```r
+View(who_tidy)
+```
+
+---
+
+## Data dictionary saves us some...
+
+1. The first three letters of entries in the `key` column correspond to `new` or `old` cases of TB.
+2. The next two letters (after the `_`) correspond to TB type:
+    - `rel` for relapse, `ep` for extrapulmonary TB
+    - `sn` for smear negative, `sp` for smear positive
+3. The next letter after the second `_` corresponds to the sex of the TB patient.
+4. The remaining numbers correspond to age group:
+    - `014` for 0 to 14 years
+    - ...
+    - `65` for 65 or older
+
+---
+
+- Looking over the entries of `key` in `who_tidy`, do you see anything else that doesn't match the pattern?
+
+- It may be easier to remember that the entries of `key` correspond to column names in `who_df`:
+
+
+```r
+names(who_df)
+```
+
+```
+ [1] "country"      "iso2"         "iso3"         "year"        
+ [5] "new_sp_m014"  "new_sp_m1524" "new_sp_m2534" "new_sp_m3544"
+ [9] "new_sp_m4554" "new_sp_m5564" "new_sp_m65"   "new_sp_f014" 
+[13] "new_sp_f1524" "new_sp_f2534" "new_sp_f3544" "new_sp_f4554"
+[17] "new_sp_f5564" "new_sp_f65"   "new_sn_m014"  "new_sn_m1524"
+[21] "new_sn_m2534" "new_sn_m3544" "new_sn_m4554" "new_sn_m5564"
+[25] "new_sn_m65"   "new_sn_f014"  "new_sn_f1524" "new_sn_f2534"
+[29] "new_sn_f3544" "new_sn_f4554" "new_sn_f5564" "new_sn_f65"  
+[33] "new_ep_m014"  "new_ep_m1524" "new_ep_m2534" "new_ep_m3544"
+[37] "new_ep_m4554" "new_ep_m5564" "new_ep_m65"   "new_ep_f014" 
+[41] "new_ep_f1524" "new_ep_f2534" "new_ep_f3544" "new_ep_f4554"
+[45] "new_ep_f5564" "new_ep_f65"   "newrel_m014"  "newrel_m1524"
+[49] "newrel_m2534" "newrel_m3544" "newrel_m4554" "newrel_m5564"
+[53] "newrel_m65"   "newrel_f014"  "newrel_f1524" "newrel_f2534"
+[57] "newrel_f3544" "newrel_f4554" "newrel_f5564" "newrel_f65"  
+```
+
+---
+
+## A fix using `stringr`
+
+You can replace all of the entries in `key` that contained `newrel` with `new_rel` via
+
+
+```r
+library(stringr)
+library(dplyr)
+who_tidy &lt;- who_tidy %&gt;% 
+  mutate(key = str_replace(
+      string = key, 
+      pattern = "newrel", 
+      replacement = "new_rel")
+    )
+```
+
+---
+
+## Pulling apart variables
+
+The entry `new_sp_m014` is actually four different variables.  Use the `separate` function to pull them apart:
+
+
+```r
+who_tidy &lt;- who_tidy %&gt;% 
+  separate(col = key, into = c("new", "type", "sexage"), sep = "_")
+who_tidy
+```
+
+```
+# A tibble: 405,440 x 8
+       country  iso2  iso3  year   new  type sexage value
+ *       &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;
+ 1 Afghanistan    AF   AFG  1980   new    sp   m014   NaN
+ 2 Afghanistan    AF   AFG  1981   new    sp   m014   NaN
+ 3 Afghanistan    AF   AFG  1982   new    sp   m014   NaN
+ 4 Afghanistan    AF   AFG  1983   new    sp   m014   NaN
+ 5 Afghanistan    AF   AFG  1984   new    sp   m014   NaN
+ 6 Afghanistan    AF   AFG  1985   new    sp   m014   NaN
+ 7 Afghanistan    AF   AFG  1986   new    sp   m014   NaN
+ 8 Afghanistan    AF   AFG  1987   new    sp   m014   NaN
+ 9 Afghanistan    AF   AFG  1988   new    sp   m014   NaN
+10 Afghanistan    AF   AFG  1989   new    sp   m014   NaN
+# ... with 405,430 more rows
+```
+
+---
+
+## One more pull apart
+
+- We need to pull `sexage` into two different variables.  
+- If you use `?separate`, you'll see that the following is an option:
+
+
+```r
+(who_tidy &lt;- who_tidy %&gt;% 
+  separate(col = sexage, into = c("sex", "age"), sep = 1))
+```
+
+```
+# A tibble: 405,440 x 9
+       country  iso2  iso3  year   new  type   sex   age value
+ *       &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+ 1 Afghanistan    AF   AFG  1980   new    sp     m   014   NaN
+ 2 Afghanistan    AF   AFG  1981   new    sp     m   014   NaN
+ 3 Afghanistan    AF   AFG  1982   new    sp     m   014   NaN
+ 4 Afghanistan    AF   AFG  1983   new    sp     m   014   NaN
+ 5 Afghanistan    AF   AFG  1984   new    sp     m   014   NaN
+ 6 Afghanistan    AF   AFG  1985   new    sp     m   014   NaN
+ 7 Afghanistan    AF   AFG  1986   new    sp     m   014   NaN
+ 8 Afghanistan    AF   AFG  1987   new    sp     m   014   NaN
+ 9 Afghanistan    AF   AFG  1988   new    sp     m   014   NaN
+10 Afghanistan    AF   AFG  1989   new    sp     m   014   NaN
+# ... with 405,430 more rows
+```
+
+---
+
+## Final cleaning
+
+- `iso2` and `iso3` are redundant if we have `country`
+- `new` is constant since this only has new cases of TB
+- Let's just ignore missing values here
+- We also know that `value` is actually `cases` so we can `rename` that column.
+
+
+```r
+who_tidy &lt;- who_tidy %&gt;% select(-iso2, -iso3, -new) %&gt;% 
+  na.omit() %&gt;% rename("cases" = value)
+head(who_tidy, 5)
+```
+
+```
+# A tibble: 5 x 6
+      country  year  type   sex   age cases
+        &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+1 Afghanistan  1997    sp     m   014     0
+2 Afghanistan  1998    sp     m   014    30
+3 Afghanistan  1999    sp     m   014     8
+4 Afghanistan  2000    sp     m   014    52
+5 Afghanistan  2001    sp     m   014   129
+```
+
+---
+
+## The power of the `%&gt;%` (pipe)
+
+Everything we did above can be chained into one sequence:
+
+
+
+```r
+who_tidy &lt;- who_df %&gt;% 
+  gather(new_sp_m014:newrel_f65, key = "key", value = "value") %&gt;%  
+  mutate(key = str_replace(key, pattern = "newrel", 
+                           replacement = "new_rel")) %&gt;% 
+  separate(col = key, into = c("new", "type", "sexage"), sep = "_") %&gt;% 
+  separate(col = sexage, into = c("sex", "age"), sep = 1) %&gt;% 
+  select(-iso2, -iso3, -new) %&gt;% 
+  na.omit() %&gt;% 
+  rename("cases" = value)
+```
+
+---
+
+## BONUS
+
+### A Gapminder tidy dataset read in from a Google Sheet!
+
+- I've updated the `gapminder` data set available in the `gapminder` R data package by Jenny Bryan [here](https://github.com/jennybc/gapminder/).  Jenny provides [instructions](https://github.com/jennybc/gapminder/tree/master/data-raw) for recreating the data.
+
+---
+
+## BONUS
+
+- You can download the updated data from Google Sheets by running the following in R:
+
+
+```r
+# Link is https://docs.google.com/spreadsheets/d/18L5ZiXd1CQ97XWSqb04x1YQ4ncsEOdR7eHzgX0ZIuPA/edit?usp=sharing
+library(googlesheets)
+updated_gap &lt;- gs_key("18L5ZiXd1CQ97XWSqb04x1YQ4ncsEOdR7eHzgX0ZIuPA") %&gt;%
+  gs_read()
+```
+
+
+- A script going through the steps to take the "messy" original Gapminder.org files and turn them into this tidy dataset is available [here](https://raw.githubusercontent.com/ismayc/tidyverse_workshops/master/importing_tidying/data/cleaning.R).
+
+---
+
+## Practice (after the bootcamp)
+
+Try to tidy the other data sets you downloaded and imported or other data sets you have!
+
+---
+
+name: model
+class: inverse, center, middle
+
+# Data Modeling
+
+
+---
+
+
+# Modeling
+
+1. Experience with `ggplot2` package and knowledge of the Grammar of Graphics primes students for modeling
+1. Use of the `broom` package to unpack regression output into a tidy format
+
+---
+
+## 1. `ggplot2` Primes Regression
+
+Example:
+
+* All Alaskan Airlines and Frontier flights leaving NYC in 2013
+* We want to study the relationship between temperature and departure delay
+* For summer (June, July, August) and non-summer months separately
+
+Involves four variables: 
+
+- `carrier`, `temp`, `dep_delay`, `summer`
+
+---
+
+## 1. `ggplot2` Primes Regression
+
+
+```r
+flights_subset &lt;- flights %&gt;% 
+  filter(carrier == "AS" | carrier == "F9") %&gt;% 
+  left_join(weather, by=c("year", "month", "day", "hour", "origin")) %&gt;% 
+  filter(dep_delay &lt; 250) %&gt;% 
+  mutate(summer = ifelse(month == 6 | month == 7 | month == 8, "Summer Flights", "Non-Summer Flights"))
+```
+
+---
+
+
+```r
+ggplot(data = flights_subset, 
+    mapping = aes(x = temp, y = dep_delay, color = carrier)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ summer)
+```
+
+![](slide_deck_files/figure-html/unnamed-chunk-73-1.png)&lt;!-- --&gt;
+
+---
+
+## 1. `ggplot2` Primes Regression
+
+Why? Dig deeper into data. Look at `origin` and `dest` variables as well:
+
+&lt;br&gt; 
+
+
+```r
+flights_subset %&gt;% 
+  group_by(carrier, origin, dest) %&gt;% 
+  summarise(`Number of Flights` = n())
+```
+
+```
+Source: local data frame [2 x 4]
+Groups: carrier, origin [?]
+
+# A tibble: 2 x 4
+  carrier origin  dest `Number of Flights`
+    &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;               &lt;int&gt;
+1      AS    EWR   SEA                 712
+2      F9    LGA   DEN                 675
+```
+
+---
+
+
+## 2. `broom` Package
+
+* The `broom` package takes the messy output of built-in modeling functions in R, such as
+`lm`, `nls`, or `t.test`, and turns them into tidy data frames.
+* Fits in with `tidyverse` ecosystem
+* This works for [many R data types](https://github.com/tidyverse/broom#available-tidiers)!
+
+---
+
+## 2. `broom` Package
+
+In our case, `broom` functions take `lm` objects as inputs and return the following in tidy format!
+
+* `tidy()`: regression output table
+* `augment()`: point-by-point values (fitted values, residuals, predicted values)
+* `glance()`: scalar summaries like &lt;large&gt; `\(R^2\)` &lt;/large&gt;, 
+
+---
+
+## 2. `broom` Package
+
+Example
+
+
+```r
+library(tidyverse)
+library(nycflights13)
+library(knitr)
+library(broom)
+set.seed(2017)
+
+# Load Alaska data, deleting rows that have missing departure delay
+# or arrival delay data
+alaska_flights &lt;- flights %&gt;% 
+  filter(carrier == "AS") %&gt;% 
+  filter(!is.na(dep_delay) &amp; !is.na(arr_delay)) %&gt;% 
+  sample_n(50)
+```
+
+---
+
+
+```r
+# Exploratory Data Analysis-----------------------------------------
+# Plot of sample of points:
+ggplot(data = alaska_flights, mapping = aes(x = dep_delay, y = arr_delay)) + 
+   geom_point()
+```
+
+![](slide_deck_files/figure-html/unnamed-chunk-76-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+# Correlation coefficient:
+alaska_flights %&gt;% summarize(correl = cor(dep_delay, arr_delay))
+```
+
+```
+# A tibble: 1 x 1
+     correl
+      &lt;dbl&gt;
+1 0.7907993
+```
+
+```r
+# Add regression line
+ggplot(data = alaska_flights, mapping = aes(x = dep_delay, y = arr_delay)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red")
+```
+
+![](slide_deck_files/figure-html/unnamed-chunk-77-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+# Fit Regression and Study Output with broom Package-------------------
+# Fit regression
+options(scipen = 6) # Set scientific notation
+delay_fit &lt;- lm(formula = arr_delay ~ dep_delay, data = alaska_flights)
+
+# 1. broom::tidy() regression table with confidence intervals 
+# and no p-value stars
+regression_table &lt;- delay_fit %&gt;% 
+  tidy(conf.int = TRUE)
+regression_table
+```
+
+```
+         term   estimate std.error statistic      p.value    conf.low
+1 (Intercept) -14.155016 2.8094813 -5.038302 7.074778e-06 -19.8038573
+2   dep_delay   1.217666 0.1360336  8.951212 8.367030e-12   0.9441519
+  conf.high
+1 -8.506176
+2  1.491180
+```
+
+---
+
+
+```r
+# 2. broom::augment() for point-by-point values
+regression_points &lt;- delay_fit %&gt;% 
+  augment() %&gt;% 
+  select(arr_delay, dep_delay, .fitted, .resid) 
+regression_points
+```
+
+```
+   arr_delay dep_delay    .fitted      .resid
+1        -38        -3 -17.808014 -20.1919862
+2         86        69  69.863923  16.1360769
+3        -38         3 -10.502019 -27.4979809
+4         61        53  50.381270  10.6187296
+5          3        12   0.456973   2.5430270
+6         21         2 -11.719685  32.7196849
+7          2        10  -1.978359   3.9783586
+8        -41        -9 -25.114009 -15.8859914
+9        -19        -7 -22.678677   3.6786770
+10         0        -6 -21.461011  21.4610112
+11        -6         0 -14.155016   8.1550165
+12       -19        -7 -22.678677   3.6786770
+13        40        10  -1.978359  41.9783586
+14        -9        -6 -21.461011  12.4610112
+15        17        28  19.939626  -2.9396257
+16       -11        -9 -25.114009  14.1140086
+17       -14         1 -12.937351  -1.0626493
+18       -37       -10 -26.331674 -10.6683256
+19       -21        -4 -19.025680  -1.9743204
+20        49        74  75.952252 -26.9522520
+21        34        15   4.109970  29.8900296
+22        29         7  -5.631356  34.6313559
+23       -42        -7 -22.678677 -19.3213230
+24        50        54  51.598936  -1.5989362
+25       -27        -5 -20.243345  -6.7566546
+26       -47        -4 -19.025680 -27.9743204
+27       -26       -14 -31.202338   5.2023375
+28       -46       -15 -32.420003 -13.5799967
+29       -15        -5 -20.243345   5.2433454
+30        11         7  -5.631356  16.6313559
+31         9         0 -14.155016  23.1550165
+32        16         2 -11.719685  27.7196849
+33         7        44  39.422278 -32.4222783
+34       -36        -5 -20.243345 -15.7566546
+35       -34        -2 -16.590348 -17.4096519
+36         4        -5 -20.243345  24.2433454
+37       -12        -1 -15.372682   3.3726823
+38       -26         2 -11.719685 -14.2803151
+39       -46         0 -14.155016 -31.8449835
+40       -47       -12 -28.767006 -18.2329940
+41       -55       -13 -29.984672 -25.0153282
+42        -9        -9 -25.114009  16.1140086
+43       -23        -1 -15.372682  -7.6273177
+44       -19       -16 -33.637669  14.6376691
+45       -38        -6 -21.461011 -16.5389888
+46       -26        -8 -23.896343  -2.1036572
+47        14         2 -11.719685  25.7196849
+48       -20         7  -5.631356 -14.3686441
+49       -42        -2 -16.590348 -25.4096519
+50       -27       -10 -26.331674  -0.6683256
+```
+
+---
+
+
+```r
+# and for prediction
+new_flights &lt;- data_frame(dep_delay = c(25, 30, 15))
+delay_fit %&gt;% 
+  augment(newdata = new_flights)
+```
+
+```
+  dep_delay  .fitted  .se.fit
+1        25 16.28663 3.967287
+2        30 22.37496 4.481560
+3        15  4.10997 3.134505
+```
+
+---
+
+
+```r
+# 3. broom::glance() scalar summaries of regression
+regression_summaries &lt;- delay_fit %&gt;% 
+  glance() 
+regression_summaries
+```
+
+```
+  r.squared adj.r.squared    sigma statistic     p.value df    logLik
+1 0.6253635     0.6175586 19.48607  80.12419 8.36703e-12  2 -218.4114
+       AIC      BIC deviance df.residual
+1 442.8227 448.5588 18225.92          48
+```
+
+---
+
+
+```r
+# Residual Analysis------------------------------------------------------
+ggplot(data = regression_points, mapping = aes(x = .resid)) +
+  geom_histogram(binwidth=10, color = "white") +
+  geom_vline(xintercept = 0, color = "blue")
+```
+
+![](slide_deck_files/figure-html/unnamed-chunk-82-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+ggplot(data = regression_points, mapping = aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 0, color = "blue")
+```
+
+![](slide_deck_files/figure-html/unnamed-chunk-83-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+ggplot(data = regression_points, mapping = aes(sample = .resid)) +
+  stat_qq()
+```
+
+![](slide_deck_files/figure-html/unnamed-chunk-84-1.png)&lt;!-- --&gt;
+
+---
+
+class: center, middle, inverse
+name: rmarkdown
+
+# Data Communicating
+
+
+---
+
+## What is Markdown?
+
+ - A "plaintext formatting syntax"
+ - Type in plain text, render to more complex formats
+ - One step beyond writing a `txt` file
+ - Render to HTML, PDF, DOCX, etc. using Pandoc
+
+---
+
+## What does it look like?
+
+.left-column[
+```
+  # Header 1
+  
+  ## Header 2
+  
+  Normal paragraphs of text go here.
+  
+  **I'm bold**
+  
+  [links!](http://rstudio.com)
+  
+   * Unordered
+   * Lists   
+   
+  And  Tables
+  ---- -------
+  Like This
+  
+```
+]
+
+.right-column[
+&lt;img src="figure/markdown.png" alt="markdown" style="width: 270px;"/&gt;
+]
+
+---
+
+## What is R Markdown?
+  
+- "Literate programming"
+- Embed R code in a Markdown document
+- Renders textual output along with graphics
+
+***
+
+.left-column[
+```
+
+```{r chunk1}
+library(ggplot2)
+library(nycflights13)
+pdx_flights &lt;- flights %&gt;% 
+  filter(dest == "PDX", month == 5)
+nrow(pdx_flights)
+```
+
+```{r chunk2}
+ggplot(data = pdx_flights,
+  mapping = aes(x = arr_delay, 
+                y = dep_delay)) +
+  geom_point()
+```
+
+```
+]
+
+.right-column[
+
+```
+[1] 88
+```
+
+![](slide_deck_files/figure-html/unnamed-chunk-85-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Practice
+
+Turn a statistical analysis you have conducted into an R Markdown document.
+
+- You can also publish online easily to &lt;http://rpubs.com&gt;
+
+---
+
+class: middle
+
+# Thanks for attending!
+
+- Slides created via the R package [xaringan](https://github.com/yihui/xaringan) by Yihui Xie
+- Source code for these slides and the webpage at &lt;https://github.com/ismayc/poRtland-bootcamp17&gt;
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({

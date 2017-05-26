@@ -3,7 +3,7 @@ navbar:
   title: "Reed SpRing Bootcamp"
   left:
     - text: "Homework"
-      href: pre-hw.html
+      href: hw.html
     - text: "Slides"
       href: slides.html
     - text: "Agenda"
