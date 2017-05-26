@@ -32,6 +32,7 @@ title: "Agenda"
 
 ### Potential other topics to cover
 
+  - Modeling with other functions/packages?
   - Other `tidyverse` packages
   - Interactive webpages using `shiny`
   - Writing books with `bookdown`
